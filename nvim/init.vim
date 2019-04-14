@@ -19,3 +19,8 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'Shougo/deoplete.nvim'
 call vundle#end()
 filetype plugin indent on  " allows auto-indenting depending on file type
+
+" Set sublime theme
+syntax on
+colorscheme sublimemonokai
+
