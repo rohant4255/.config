@@ -23,4 +23,3 @@ filetype plugin indent on  " allows auto-indenting depending on file type
 " Set sublime theme
 syntax on
 colorscheme sublimemonokai
-
