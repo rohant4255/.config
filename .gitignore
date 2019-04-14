@@ -1,6 +1,7 @@
 /*
 /*/
 !.gitignore
+!setup.sh
 !/i3
 !/nvim
 /nvim/bundle
