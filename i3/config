@@ -152,5 +152,16 @@ bindsym XF86MonBrightnessUp exec "light -A 5; notify-send 'brightness up'"
 bindsym XF86MonBrightnessDown exec "light -U 5; notify-send 'brightness down'"
 
 # Remove title for terminal
-for_window [class="^.*"] border pixel 1
+for_window [class="^.*"] border pixel 3
 new_window 1pixel
+
+# Scratchpad setup
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
+# Show the sup-mail scratchpad window, if any.
+#bindsym $mod+s [title="^Sup ::"] scratchpad show
+
+# Key binding for gtd inbox
+bindsym $mod+z exec google-chrome --app https://docs.google.com/document/u/1/d/1VWzQoSRFo97lMcR-5UNc9tYtZMMGHR2uXa402WsquAg/edit
