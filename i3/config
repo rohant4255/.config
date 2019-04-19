@@ -152,7 +152,7 @@ bindsym XF86MonBrightnessUp exec "light -A 5; notify-send 'brightness up'"
 bindsym XF86MonBrightnessDown exec "light -U 5; notify-send 'brightness down'"
 
 # Remove title for terminal
-for_window [class="^.*"] border pixel 3
+for_window [class="^.*"] border pixel 5
 new_window 1pixel
 
 # Scratchpad setup
@@ -165,3 +165,6 @@ bindsym $mod+minus scratchpad show
 
 # Key binding for gtd inbox
 bindsym $mod+z exec google-chrome --app https://docs.google.com/document/u/1/d/1VWzQoSRFo97lMcR-5UNc9tYtZMMGHR2uXa402WsquAg/edit
+
+# Start Network Config
+bindsym $mod+n exec gnome-terminal -e "nmtui"
