@@ -168,3 +168,6 @@ bindsym $mod+z exec google-chrome --app https://docs.google.com/document/u/1/d/1
 
 # Start Network Config
 bindsym $mod+n exec gnome-terminal -e "nmtui"
+
+# Start Audio Config
+bindsym $mod+v exec gnome-terminal -e "alsamixer"
