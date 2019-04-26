@@ -9,7 +9,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod1
+set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -166,6 +166,9 @@ bindsym $mod+minus scratchpad show
 
 # Key binding for gtd inbox
 bindsym $mod+z exec google-chrome --app https://docs.google.com/document/u/1/d/1VWzQoSRFo97lMcR-5UNc9tYtZMMGHR2uXa402WsquAg/edit
+
+# Key binding for Chrome
+bindsym $mod+c exec google-chrome 
 
 # Start Network Config
 bindsym $mod+n exec gnome-terminal -e "nmtui"
