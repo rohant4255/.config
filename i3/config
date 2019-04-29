@@ -176,4 +176,4 @@ bindsym $mod+n exec gnome-terminal -e "nmtui"
 # Start Audio Config
 bindsym $mod+v exec gnome-terminal -e "alsamixer"
 
-exec --no-startup-id gnome-settings-daemon
+exec ~/.config/i3/keyswap.sh
