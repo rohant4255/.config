@@ -6,6 +6,7 @@ set autoindent              " indent a new line the same amount as the line just
 set number                  " add line numbers
 set wildmode=longest,list   " get bash-like tab completions
 set cc=80                   " set an 80 column border for good coding style
+set clipboard=unnamedplus   " set default to copy to normal clipboard
 
 filetype off
 " set the runtime path to include Vundle and initialize
