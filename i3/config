@@ -174,16 +174,18 @@ bindsym $mod+c exec google-chrome
 bindsym $mod+n exec gnome-terminal -e "nmtui"
 
 # Start Audio Config
-bindsym $mod+v exec gnome-terminal -e "alsamixer"
+# bindsym $mod+v exec gnome-terminal -e "alsamixer"
 
 # Start Take Screeshot
 bindsym $mod+p exec "gnome-screenshot --interactive"
 
-# Swap alt and windows key
+# Swap alt and windows key on startup
 exec ~/.config/i3/keyswap.sh
+# Start windows on startup
+exec vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx
 
 # Move focused window between monitors
-bindsym $mod+bracketright move container to output right; focus output right 
+bindsym $mod+bracketright move container to output right; focus output right
 bindsym $mod+bracketleft move container to output left; focus output left
 
 # Stop focus moving with mouse hover
@@ -191,3 +193,9 @@ focus_follows_mouse no
 
 # xfce launcher
 bindsym $mod+x exec "xfce4-appfinder"
+
+# start windows
+bindsym $mod+v exec "vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx"
+
+# xfce launcher
+bindsym Mod1+l exec "xflock4"
