@@ -199,3 +199,6 @@ bindsym $mod+x exec "xfce4-appfinder"
 
 # xfce launcher
 bindsym Mod1+l exec "xflock4"
+
+# Start nitrogen (wallpapers) by on startup
+exec --no-startup-id nitrogen --restore
