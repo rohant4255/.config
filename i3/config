@@ -182,7 +182,7 @@ bindsym $mod+p exec "gnome-screenshot --interactive"
 # Swap alt and windows key on startup
 exec ~/.config/i3/keyswap.sh
 # Start windows on startup
-exec vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx
+#exec vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx
 
 # Move focused window between monitors
 bindsym $mod+bracketright move container to output right; focus output right
@@ -195,7 +195,7 @@ focus_follows_mouse no
 bindsym $mod+x exec "xfce4-appfinder"
 
 # start windows
-#bindsym $mod+v exec "vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx"
+bindsym $mod+v exec "vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx"
 
 # xfce launcher
 bindsym Mod1+l exec "xflock4"
