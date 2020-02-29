@@ -4,9 +4,7 @@
 # Should you change your keyboard layout some time, delete
 # this file and re-run i3-config-wizard(1).
 #
-
 # i3 config file (v4)
-#
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
@@ -165,7 +163,7 @@ bindsym $mod+minus scratchpad show
 #bindsym $mod+s [title="^Sup ::"] scratchpad show
 
 # Key binding for gtd inbox
-bindsym $mod+z exec google-chrome --app https://docs.google.com/document/u/1/d/1VWzQoSRFo97lMcR-5UNc9tYtZMMGHR2uXa402WsquAg/edit
+bindsym $mod+z exec google-chrome --app https://docs.google.com/document/d/1VWzQoSRFo97lMcR-5UNc9tYtZMMGHR2uXa402WsquAg/edit 
 
 # Key binding for Chrome
 bindsym $mod+c exec google-chrome
@@ -178,11 +176,6 @@ bindsym $mod+n exec gnome-terminal -e "nmtui"
 
 # Start Take Screeshot
 bindsym $mod+p exec "gnome-screenshot --interactive"
-
-# Swap alt and windows key on startup
-exec ~/.config/i3/keyswap.sh
-# Start windows on startup
-#exec vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx
 
 # Move focused window between monitors
 bindsym $mod+bracketright move container to output right; focus output right
@@ -198,7 +191,13 @@ bindsym $mod+x exec "xfce4-appfinder"
 bindsym $mod+v exec "vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx"
 
 # xfce launcher
-bindsym Mod1+l exec "xflock4"
+bindsym $mod+l exec "xflock4"
+
+# Start windows on startup
+# exec vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx
 
 # Start nitrogen (wallpapers) by on startup
 exec --no-startup-id nitrogen --restore
+
+# Swap alt and windows key on startup
+exec ~/.config/i3/keyswap.sh
