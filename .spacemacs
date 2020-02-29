@@ -426,8 +426,12 @@ you should place your code here."
 
   ;; Show only one active window when opening multiple files at the same time.
   (add-hook 'window-setup-hook 'delete-other-windows)
+
+  ;; Fix org mode new line auto bullet problem
   (use-package org
      :bind (:map spacemacs-org-mode-map-root-map ("M-RET" . nil)))
+  (setq org-blank-before-new-entry (quote ((heading . nil)
+                                           (plain-list-item . nil))))
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
