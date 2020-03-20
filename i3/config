@@ -190,9 +190,6 @@ bindsym $mod+x exec "xfce4-appfinder"
 # start windows
 bindsym $mod+v exec "vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx"
 
-# xfce launcher
-bindsym $mod+l exec "xflock4"
-
 # Start windows on startup
 # exec vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx
 

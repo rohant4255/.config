@@ -9,4 +9,3 @@ ln -s $PWD/.tmux.conf ~
 # Setup autostart emacs
 sudo ln -s ~/.config/startemacs.sh /etc/init.d/
 sudo update-rc.d /etc/init.d/startemacs.sh defaults
-
