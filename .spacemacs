@@ -55,8 +55,7 @@ values."
      git
      markdown
      (org :variables org-enable-reveal-js-support t)
-     mu4e
-     ;; email
+     ;; mu4e
      cmake
      (gtags :variables gtags-enable-by-default t)
      ;; (cmake :variables cmake-enable-cmake-ide-support t)
