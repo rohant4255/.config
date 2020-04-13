@@ -69,7 +69,7 @@ values."
      (spell-checking :variables enable-flyspell-auto-completion t)
      syntax-checking
      version-control
-     latex
+     (latex :variables latex-enable-auto-fill t)
      auto-completion
      ;;(extra-langs :variables matlab-mode t)
      neotree
