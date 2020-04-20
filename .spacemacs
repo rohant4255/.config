@@ -485,7 +485,7 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
       ((tags "PRIORITY=\"A\""
              ((org-agenda-skip-function
                '(or (org-agenda-skip-entry-if 'todo 'done)
-                    (org-agenda-skip-entry-if 'nil '(scheduled))))
+                    (org-agenda-skip-entry-if 'nil 'scheduled)))
               (org-agenda-overriding-header "Today")
               ))
        (agenda ""
@@ -493,7 +493,7 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
        (tags "PRIORITY=\"B\""
              ((org-agenda-skip-function
                '(or (org-agenda-skip-entry-if 'todo 'done)
-                    (org-agenda-skip-entry-if 'nil '(scheduled))))
+                    (org-agenda-skip-entry-if 'nil 'scheduled)))
               (org-agenda-overriding-header "This Week")))
        (alltodo ""
                 ((org-agenda-skip-function
