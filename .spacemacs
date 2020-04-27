@@ -545,6 +545,13 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
     (org-schedule :SCHEDULED "<today>")
   )
   (define-key global-map (kbd "M-p") 'todo-set-urgent)
+  ;; Org Capture Urgent Tasks
+  (setq org-default-notes-file (concat org-directory "~/Dropbox/org/current/inbox.org"))
+  (setq org-capture-templates
+        '(("u" "Todo" entry (file+headline "~/Dropbox/org/current/inbox.org" "Tasks")
+     "* TODO [#A] %?\n SCHEDULED: %t")
+    ))
+  (define-key global-map (kbd "M-n") (lambda () (interactive) (org-capture  nil "u")))
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
