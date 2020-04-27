@@ -349,8 +349,8 @@ you should place your code here."
   (define-key evil-normal-state-map (kbd "C-l") (kbd "SPC w l"))
 
   ;; Priority Org-Mode Todos
-  (define-key evil-normal-state-map (kbd "M-P") 'org-priority-up)
-  (define-key evil-normal-state-map (kbd "M-p") 'org-priority-down)
+  (define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
+  (define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
 
   ;; Better scrolling
   (define-key evil-normal-state-map "K" (kbd "<prior>"))
@@ -481,31 +481,40 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
           subtree-end
         nil)))
   (setq org-agenda-custom-commands
-    '(("c" "Simple agenda view"
-      ((tags "PRIORITY=\"A\""
-             ((org-agenda-skip-function
-               '(or (org-agenda-skip-entry-if 'todo 'done)
-                    (org-agenda-skip-entry-if 'nil 'scheduled)))
-              (org-agenda-overriding-header "Today")
-              ))
-       (agenda ""
-               ((org-agenda-entry-types '(:scheduled :deadline))))
-       (tags "PRIORITY=\"B\""
-             ((org-agenda-skip-function
-               '(or (org-agenda-skip-entry-if 'todo 'done)
-                    (org-agenda-skip-entry-if 'nil 'scheduled)))
-              (org-agenda-overriding-header "This Week")))
+    '(("c" "Schedule and Tasks"
+      ;; ((tags "PRIORITY=\"A\""
+      ;;        ((org-agenda-skip-function
+      ;;          '(or (org-agenda-skip-entry-if 'todo 'done)
+      ;;               (org-agenda-skip-entry-if 'nil 'scheduled)))
+      ;;         (org-agenda-overriding-header "Today")
+      ;;         ))
+       ((agenda ""
+               ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-entry-types '(:scheduled :deadline))))
+       ;; (tags "PRIORITY=\"B\""
+       ;;       ((org-agenda-skip-function
+       ;;         '(or (org-agenda-skip-entry-if 'todo 'done)
+       ;;              (org-agenda-skip-entry-if 'nil 'scheduled)))
+       ;;        (org-agenda-overriding-header "This Week")))
        (alltodo ""
                 ((org-agenda-skip-function
-                  '(or (air-org-skip-subtree-if-priority ?A)
-                       (air-org-skip-subtree-if-priority ?B)
+                  '(or (org-agenda-skip-entry-if 'todo 'done)
                        (org-agenda-skip-if nil '(scheduled deadline))))
                  (org-agenda-sorting-strategy '(priority-down todo-state-up))
                  )))
       ;; ((org-agenda-compact-blocks t))
-      )))
+       )
+      ("d" "Urgent Tasks"
+       ((tags-todo "PRIORITY=\"A\"&SCHEDULED<=\"<today>\""
+              ((org-agenda-span 'day)
+               (org-agenda-skip-function
+                '(or (org-agenda-skip-entry-if 'todo 'done)
+                     nil))
+               ))))
+      ))
   ;; Shortcut for custom agenda view
   (define-key global-map (kbd "C-SPC") (kbd "C-c a c"))
+  (define-key global-map (kbd "C-S-SPC") (kbd "C-c a d"))
   ;; Customize org priorities
   (setq org-default-priority ?D)
   (setq org-lowest-priority ?E)
@@ -526,6 +535,16 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
                                       (?B . "⮬")
                                       (?C . "⮮")
                                       (?E . "☕"))))
+  ;; Todo state colors
+  (setq org-todo-keyword-faces
+        '(("WAITING" . "gray")))
+  ;; Shortcut for urgent tasks
+  (defun todo-set-urgent()
+    (interactive)
+    (org-priority ?A)
+    (org-schedule :SCHEDULED "<today>")
+  )
+  (define-key global-map (kbd "M-p") 'todo-set-urgent)
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
