@@ -55,7 +55,9 @@ values."
      git
      markdown
      (org :variables org-enable-reveal-js-support t)
-     ;; mu4e
+     (mu4e :variables mu4e-alert-enable-mode-line-display t
+           mu4e-alert-enable-notifications t
+           mu4e-enable-mode-line t)
      cmake
      (gtags :variables gtags-enable-by-default t)
      ;; (cmake :variables cmake-enable-cmake-ide-support t)
@@ -72,6 +74,7 @@ values."
      auto-completion
      ;;(extra-langs :variables matlab-mode t)
      neotree
+     (xclipboard :variables xclipboard-enable-cliphist t)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -422,7 +425,7 @@ you should place your code here."
   (defun remove-scratch-buffer ()
     (if (get-buffer "*scratch*")
         (kill-buffer "*scratch*")))
-  (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+  ;;(add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
   ;; Don't show *Buffer list* when opening multiple files at the same time.
   (setq inhibit-startup-buffer-menu t)
@@ -503,12 +506,13 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
                  (org-agenda-sorting-strategy '(priority-down todo-state-up))
                  )))
       ;; ((org-agenda-compact-blocks t))
+       ((org-agenda-skip-deadline-prewarning-if-scheduled t))
        )
       ("d" "Urgent Tasks"
        ((tags-todo "PRIORITY=\"A\"&SCHEDULED<=\"<today>\""
               ((org-agenda-span 'day)
                (org-agenda-skip-function
-                '(or (org-agenda-skip-entry-if 'todo 'done)
+                '(or (org-agenda-skip-entry-if 'todo '("DONE" "WAITING"))
                      nil))
                ))))
       ))
@@ -552,6 +556,24 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
      "* TODO [#A] %?\n SCHEDULED: %t")
     ))
   (define-key global-map (kbd "M-n") (lambda () (interactive) (org-capture  nil "u")))
+
+  ;; Show clock-in status on spaceline
+  (spaceline-toggle-org-clock-on)
+
+  ;; Set up email
+  (setq mu4e-maildir "~/.mail/outlook"
+        mu4e-get-mail-command "mbsync -a"
+        mu4e-update-interval 60
+        mu4e-compose-signature-auto-include nil
+        mu4e-view-show-images t
+        mu4e-view-show-addresses t
+        mu4e-attachment-dir "~/Downloads"
+        mu4e-use-fancy-chars t)
+  (setq message-send-mail-function 'smtpmail-send-it
+        user-full-name "Rohan Thakker"
+        user-mail-address "rohan.a.thakker@jpl.nasa.gov"
+        smtpmail-smtp-server "localhost"
+        smtpmail-smtp-service 1025)
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -582,7 +604,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(org-agenda-files
    (quote
-    ("~/Dropbox/org/current/cs177.org" "~/Dropbox/org/current/eels.org" "~/Dropbox/org/current/gtd.org" "~/Dropbox/org/current/inbox.org" "~/Dropbox/org/current/meeting_notes.org" "~/Dropbox/org/current/mylife.org" "~/Dropbox/org/current/phd.org" "~/Dropbox/org/current/phd_talk.org" "~/Dropbox/org/current/projects.org" "~/Dropbox/org/current/projects_old.org" "~/Dropbox/org/current/someday.org" "~/Dropbox/org/current/spacemacs_notes.org" "~/Dropbox/org/current/thoughts.org")))
+    ("~/Dropbox/org/current/DARTS.org" "~/Dropbox/org/current/cs177.org" "~/Dropbox/org/current/eels.org" "~/Dropbox/org/current/eels_test_05052020.org" "~/Dropbox/org/current/gtd.org" "~/Dropbox/org/current/inbox.org" "~/Dropbox/org/current/logbook.org" "~/Dropbox/org/current/meeting_notes.org" "~/Dropbox/org/current/mylife.org" "~/Dropbox/org/current/notes.org" "~/Dropbox/org/current/phd.org" "~/Dropbox/org/current/phd_talk.org" "~/Dropbox/org/current/projects.org" "~/Dropbox/org/current/projects_old.org" "~/Dropbox/org/current/someday.org" "~/Dropbox/org/current/spacemacs_notes.org" "~/Dropbox/org/current/talks.org" "~/Dropbox/org/current/thoughts.org")))
  '(package-selected-packages
    (quote
     (org-fancy-priorities flyspell-popup mu4e-maildirs-extension mu4e-alert ht org-fragtog ox-reveal web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data mmm-mode evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu evil undo-tree auctex spinner adaptive-wrap yapfify yaml-mode xterm-color ws-butler winum which-key web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org thrift stan-mode spaceline powerline smeargle smartparens shell-pop scad-mode rtags restart-emacs rainbow-delimiters qml-mode pyvenv pytest pyenv-mode py-isort popwin pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-mime org-download org-bullets open-junk-file neotree mwim multi-term move-text matlab-mode markdown-toc magit-gitflow magit-popup magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint julia-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js-doc indent-guide hydra lv hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md ggtags fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck pkg-info epl flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-unimpaired evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter git-commit with-editor transient evil-escape goto-chg eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav ein skewer-mode markdown-mode polymode deferred request websocket js2-mode simple-httpd dumb-jump doom-themes disaster diminish diff-hl define-word cython-mode company-tern dash-functional tern company-statistics company-c-headers company-auctex company-anaconda company column-enforce-mode coffee-mode cmake-mode cmake-ide levenshtein clean-aindent-mode clang-format bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed auctex-latexmk arduino-mode anaconda-mode pythonic f dash s aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup monokai-theme))))
