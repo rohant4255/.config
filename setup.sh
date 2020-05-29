@@ -1,6 +1,8 @@
 #!/bin/bash
 # TODO: Add installation of light
 echo 'export PROMPT_COMMAND="pwd > /tmp/whereami"' >> ~/.bashrc
+echo 'export PROMPT_COMMAND="pwd > /tmp/whereami"' >> ~/.zshrc
+echo 'source ~/.config/.bash_alias' >> ~/.profile
 sudo apt-get install xclip
 ln -s ~/.config/.gitignore_global .
 git config --global core.excludesfile ~/.gitignore_global

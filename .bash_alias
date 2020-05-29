@@ -1,0 +1,22 @@
+# Set Alias'
+alias gs='git status '
+alias ga='git add '
+alias gb='git branch '
+alias gc='git commit'
+alias gd='git diff'
+alias go='git checkout '
+alias gl='git log'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+vim() { nohup emacsclient -c $@ &; disown; exit;}
+alias vimg="emacsclient -c"
+alias vimt="emacsclient -nw -c $1"
+alias r='ranger'
+alias oc="emacsclient -nw -c /home/traj/Dropbox/org/current/inbox\.org"
+alias org="cd /home/traj/Dropbox/org/current/"
+alias gp='gitcheck -u'
+alias dlabrun=/home/traj/projects/darts/JplDartsLab/dlabrun
+alias srun=/home/traj/projects/darts/JplDartsLab/TPS/bin/srun
+#alias ll="colorls -lA --sd"
+#alias ls="colorls --gs --sd"
