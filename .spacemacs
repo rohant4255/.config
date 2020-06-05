@@ -576,7 +576,7 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
         user-mail-address "rohan.a.thakker@jpl.nasa.gov"
         smtpmail-smtp-server "localhost"
         smtpmail-smtp-service 1025)
-  ;; Start terminal on exit frame
+  ;; Start terminal on exit frame from directory where emacs was started
   ;; (defun run-gnome-terminal-here ()
   ;;   (interactive "@")
   ;;   (shell-command (concat "gnome-terminal  --working-directory="
@@ -584,7 +584,8 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
   ;;                          " >/dev/null 2>&1 & disown") nil nil))
   (defun run-terminal ()
     (interactive "@")
-    (shell-command (concat "gnome-terminal --working-directory=" (file-name-directory buffer-file-name) " > /dev/null 2>&1 & disown") nil nil)
+    ;; (shell-command (concat "gnome-terminal --working-directory=" (file-name-directory buffer-file-name) " > /dev/null 2>&1 & disown") nil nil)
+    (shell-command (concat "gnome-terminal --working-directory=`realpath " command-line-default-directory "` > /dev/null 2>&1 & disown") nil nil)
     (sleep-for 0.3))
   (define-key global-map (kbd "M-t") 'run-terminal)
   (defun run-terminal-on-exit-frame (frame)
