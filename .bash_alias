@@ -9,7 +9,7 @@ alias gl='git log'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-vim() { nohup emacsclient -c $@ &; disown; exit;}
+vim() { nohup emacsclient -c $@ &; disown; sleep 0.3; exit;}
 alias vimg="emacsclient -c"
 alias vimt="emacsclient -nw -c $1"
 alias r='ranger'

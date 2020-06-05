@@ -68,7 +68,7 @@ values."
      (shell :variables
             shell-default-shell 'multi-term
             shell-default-term-shell "/bin/bash")
-     (spell-checking :variables enable-flyspell-auto-completion t)
+     ;; (spell-checking :variables enable-flyspell-auto-completion t)
      syntax-checking
      version-control
      (latex :variables latex-enable-auto-fill t)
@@ -86,6 +86,7 @@ values."
                                       cmake-ide
                                       org-fragtog
                                       org-fancy-priorities
+                                      org-caldav
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -583,11 +584,30 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
   ;;                          " >/dev/null 2>&1 & disown") nil nil))
   (defun run-terminal ()
     (interactive "@")
-    (shell-command (concat "gnome-terminal --working-directory=" (file-name-directory buffer-file-name) " > /dev/null 2>&1 & disown") nil nil))
+    (shell-command (concat "gnome-terminal --working-directory=" (file-name-directory buffer-file-name) " > /dev/null 2>&1 & disown") nil nil)
+    (sleep-for 0.3))
   (define-key global-map (kbd "M-t") 'run-terminal)
   (defun run-terminal-on-exit-frame (frame)
     (run-terminal))
   (add-to-list 'delete-frame-functions 'run-terminal-on-exit-frame)
+  ;; Outlook Calendar
+
+   ;; allow opening the exchange calendar with 'e' from calendar
+   ;; (evil-define-key 'motion calendar-mode-map "e" #'exco-calendar-show-day)
+   ;; (setq org-agenda-include-diary t)
+   ;; (excorporate-diary-enable)
+   ;; (defun ab/agenda-update-diary ()
+   ;;   "call excorporate to update the diary for today"
+   ;;   (exco-diary-diary-advice (calendar-current-date) (calendar-current-date) #'message "diary updated")
+   ;;   )
+   ;; ;; update the diary every time the org agenda is refreshed
+   ;; (add-hook 'org-agenda-cleanup-fancy-diary-hook 'ab/agenda-update-diary )
+   ;; (setq org-caldav-url "http://localhost:1080/users"
+   ;;       org-caldav-calendar-id "rohan.a.thakker@jpl.nasa.gov/calendar"
+   ;;       org-caldav-uuid-extension ".EML"
+   ;;       org-caldav-inbox "~/org/remote.org")
+  ;; Autosave Org Files
+  (add-hook 'auto-save-hook 'org-save-all-org-buffers)
   )
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -621,7 +641,7 @@ This function is called at the very end of Spacemacs initialization."
     ("~/Dropbox/org/current/Balloon.org" "~/Dropbox/org/current/DARTS.org" "~/Dropbox/org/current/Owl.org" "~/Dropbox/org/current/cs177.org" "~/Dropbox/org/current/eels.org" "~/Dropbox/org/current/eels_test_05052020.org" "~/Dropbox/org/current/gtd.org" "~/Dropbox/org/current/inbox.org" "~/Dropbox/org/current/logbook.org" "~/Dropbox/org/current/meeting_notes.org" "~/Dropbox/org/current/mylife.org" "~/Dropbox/org/current/notes.org" "~/Dropbox/org/current/phd.org" "~/Dropbox/org/current/phd_talk.org" "~/Dropbox/org/current/projects.org" "~/Dropbox/org/current/projects_old.org" "~/Dropbox/org/current/someday.org" "~/Dropbox/org/current/spacemacs_notes.org" "~/Dropbox/org/current/talks.org" "~/Dropbox/org/current/thoughts.org")))
  '(package-selected-packages
    (quote
-    (csv-mode org-fancy-priorities flyspell-popup mu4e-maildirs-extension mu4e-alert ht org-fragtog ox-reveal web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data mmm-mode evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu evil undo-tree auctex spinner adaptive-wrap yapfify yaml-mode xterm-color ws-butler winum which-key web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org thrift stan-mode spaceline powerline smeargle smartparens shell-pop scad-mode rtags restart-emacs rainbow-delimiters qml-mode pyvenv pytest pyenv-mode py-isort popwin pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-mime org-download org-bullets open-junk-file neotree mwim multi-term move-text matlab-mode markdown-toc magit-gitflow magit-popup magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint julia-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js-doc indent-guide hydra lv hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md ggtags fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck pkg-info epl flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-unimpaired evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter git-commit with-editor transient evil-escape goto-chg eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav ein skewer-mode markdown-mode polymode deferred request websocket js2-mode simple-httpd dumb-jump doom-themes disaster diminish diff-hl define-word cython-mode company-tern dash-functional tern company-statistics company-c-headers company-auctex company-anaconda company column-enforce-mode coffee-mode cmake-mode cmake-ide levenshtein clean-aindent-mode clang-format bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed auctex-latexmk arduino-mode anaconda-mode pythonic f dash s aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup monokai-theme))))
+    (org-caldav excorporate nadvice url-http-ntlm soap-client fsm csv-mode org-fancy-priorities flyspell-popup mu4e-maildirs-extension mu4e-alert ht org-fragtog ox-reveal web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data mmm-mode evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu evil undo-tree auctex spinner adaptive-wrap yapfify yaml-mode xterm-color ws-butler winum which-key web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org thrift stan-mode spaceline powerline smeargle smartparens shell-pop scad-mode rtags restart-emacs rainbow-delimiters qml-mode pyvenv pytest pyenv-mode py-isort popwin pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-mime org-download org-bullets open-junk-file neotree mwim multi-term move-text matlab-mode markdown-toc magit-gitflow magit-popup magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint julia-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js-doc indent-guide hydra lv hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md ggtags fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck pkg-info epl flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-unimpaired evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter git-commit with-editor transient evil-escape goto-chg eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav ein skewer-mode markdown-mode polymode deferred request websocket js2-mode simple-httpd dumb-jump doom-themes disaster diminish diff-hl define-word cython-mode company-tern dash-functional tern company-statistics company-c-headers company-auctex company-anaconda company column-enforce-mode coffee-mode cmake-mode cmake-ide levenshtein clean-aindent-mode clang-format bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed auctex-latexmk arduino-mode anaconda-mode pythonic f dash s aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup monokai-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
