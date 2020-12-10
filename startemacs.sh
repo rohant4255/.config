@@ -1,2 +1,2 @@
 #/bin/bash
-emacs --daemon && davmail
+emacs --daemon #&& davmail

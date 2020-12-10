@@ -31,6 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     php
+     pdf-tools
      csv
      html
      (javascript :variables
@@ -38,7 +40,7 @@ values."
                  js2-basic-offset 2
                  js-indent-level 2)
      python
-     ipython-notebook
+     ;; ipython-notebook
      gtags
      octave
      yaml
@@ -49,17 +51,16 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      helm
-     neotree
      ;; auto-completion
      better-defaults
      emacs-lisp
      git
+     bibtex
      markdown
      (org :variables org-enable-reveal-js-support t)
      (mu4e :variables mu4e-alert-enable-mode-line-display t
            mu4e-alert-enable-notifications t
            mu4e-enable-mode-line t)
-     cmake
      (gtags :variables gtags-enable-by-default t)
      ;; (cmake :variables cmake-enable-cmake-ide-support t)
      (c-c++ :variables
@@ -71,11 +72,13 @@ values."
      ;; (spell-checking :variables enable-flyspell-auto-completion t)
      syntax-checking
      version-control
-     (latex :variables latex-enable-auto-fill t)
+     (latex :variables
+            latex-enable-auto-fill t
+            latex-build-command "LaTeX"
+            )
      auto-completion
      ;;(extra-langs :variables matlab-mode t)
-     neotree
-     (xclipboard :variables xclipboard-enable-cliphist t)
+     ;; (xclipboard :variables xclipboard-enable-cliphist t)
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -87,6 +90,12 @@ values."
                                       org-fragtog
                                       org-fancy-priorities
                                       org-caldav
+                                      evil-mu4e
+                                      xclip
+                                      org-noter
+                                      tikz
+                                      ob-ipython
+                                      py-yapf
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -166,7 +175,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Ubuntu Mono"
-                               :size 18
+                               :size 24
                                :weight normal
                                :width normal
                                :powerline-scale 0.8)
@@ -375,7 +384,7 @@ you should place your code here."
   (define-key global-map (kbd "C-+") 'text-scale-increase)
   (define-key global-map (kbd "C--") 'text-scale-decrease)
   ;; Bind clang-format-buffer to tab on the c++-mode only:
-  (add-hook 'c++-mode-hook 'clang-format-bindings)
+  ;; (add-hook 'c++-mode-hook 'clang-format-bindings)
   (add-hook 'org-mode-hook 'org-fragtog-mode)
   (defun clang-format-bindings ()
     (define-key c++-mode-map [tab] 'clang-format-buffer)
@@ -563,14 +572,20 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
   (spaceline-toggle-org-clock-on)
 
   ;; Set up email
+  (require 'evil-mu4e)
+  (require 'org-mu4e)
   (setq mu4e-maildir "~/.mail/outlook"
         mu4e-get-mail-command "mbsync -a"
-        mu4e-update-interval 60
+        ;; mu4e-update-interval 60
         mu4e-compose-signature-auto-include nil
         mu4e-view-show-images t
         mu4e-view-show-addresses t
         mu4e-attachment-dir "~/Downloads"
-        mu4e-use-fancy-chars t)
+        mu4e-use-fancy-chars t
+        mu4e-view-prefer-html t
+        mu4e-headers-include-related t
+        mu4e-headers-show-threads t
+        mu4e-html2text-command "html2markdown | grep -v '&nbsp_place_holder;'")
   (setq message-send-mail-function 'smtpmail-send-it
         user-full-name "Rohan Thakker"
         user-mail-address "rohan.a.thakker@jpl.nasa.gov"
@@ -590,7 +605,7 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
   (define-key global-map (kbd "M-t") 'run-terminal)
   (defun run-terminal-on-exit-frame (frame)
     (run-terminal))
-  (add-to-list 'delete-frame-functions 'run-terminal-on-exit-frame)
+  ;; (add-to-list 'delete-frame-functions 'run-terminal-on-exit-frame)
   ;; Outlook Calendar
 
    ;; allow opening the exchange calendar with 'e' from calendar
@@ -609,7 +624,63 @@ PRIORITY may be one of the characters ?A, ?B, or ?C."
    ;;       org-caldav-inbox "~/org/remote.org")
   ;; Autosave Org Files
   (add-hook 'auto-save-hook 'org-save-all-org-buffers)
+  ;; Activate clipboard in terminal
+  (xclip-mode 1)
+  ;; Support for babel languages
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((dot . t)   ; this line activates dot
+     (plantuml . t)
+     (ipython . t)
+     (python . t)
+     (latex . t)))
+  ;; Set Up PlantUML
+  (setq org-plantuml-jar-path
+        (expand-file-name "~/src/org/contrib/scripts/plantuml.jar"))
+  (defun my/fix-inline-images ()
+    (when org-inline-image-overlays
+      (org-redisplay-inline-images)))
+  (add-hook 'org-babel-after-execute-hook 'my/fix-inline-images)
+  ;; Latex Babel
+  (setq exec-path (append exec-path '("/usr/bin")))
+  (load "auctex.el" nil t t)
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  ;; Latex Preview tikz
+  (add-to-list 'org-latex-packages-alist
+               '("" "tikz" t))
+  (eval-after-load "preview"
+    '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t))
+  ;; (setq org-latex-create-formula-image-program 'imagemagick)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 3.0))
+  ;; Support for image size in org mode
+  (setq org-image-actual-width nil)
+
+  ;; org-ref
+  ;; (require 'org-ref)
+  (setq reftex-default-bibliography '("~/Dropbox/bibliography/library.bib"))
+  ;; see org-ref for use of these variables
+  (setq org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
+        org-ref-default-bibliography '("~/Dropbox/bibliography/references.bib")
+        org-ref-pdf-directory "~/Dropbox/bibliography/bibtex-pdfs/")
+  ;; ;; org-ref with helm-bibtex
+  (setq bibtex-completion-bibliography "~/Dropbox/bibliography/references.bib"
+        bibtex-completion-library-path "~/Dropbox/bibliography/bibtex-pdfs"
+        bibtex-completion-notes-path "~/Dropbox/bibliography/helm-bibtex-notes")
+  ;; open pdf with system pdf viewer (works on mac)
+  (setq bibtex-completion-pdf-open-function
+        (lambda (fpath)
+          (start-process "open" "*open*" "open" fpath)))
+  (setq org-ref-open-pdf-function
+        (lambda (fpath)
+          (start-process "zathura" "*helm-bibtex-zathura*" "/usr/bin/zathura" fpath)))
+
+  ;; Org Mode Tikz Preview
+  (setq org-preview-latex-default-process 'dvisvgm)
+
+  ;; No Eval Prompt Org-babel
+  ;; (setq org-confirm-babel-evaluate nil)
   )
+
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
 (defun dotspacemacs/emacs-custom-settings ()
@@ -637,12 +708,13 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol nil)
  '(org-agenda-files
    (quote
-    ("~/Dropbox/org/current/Balloon.org" "~/Dropbox/org/current/DARTS.org" "~/Dropbox/org/current/Owl.org" "~/Dropbox/org/current/cs177.org" "~/Dropbox/org/current/eels.org" "~/Dropbox/org/current/eels_test_05052020.org" "~/Dropbox/org/current/gtd.org" "~/Dropbox/org/current/inbox.org" "~/Dropbox/org/current/logbook.org" "~/Dropbox/org/current/meeting_notes.org" "~/Dropbox/org/current/mylife.org" "~/Dropbox/org/current/notes.org" "~/Dropbox/org/current/phd.org" "~/Dropbox/org/current/phd_talk.org" "~/Dropbox/org/current/projects.org" "~/Dropbox/org/current/projects_old.org" "~/Dropbox/org/current/someday.org" "~/Dropbox/org/current/spacemacs_notes.org" "~/Dropbox/org/current/talks.org" "~/Dropbox/org/current/thoughts.org")))
+    ("~/projects/sael/survey/survey.org" "~/Dropbox/org/current/inbox.org" "~/Dropbox/org/current/PropEst.org" "~/Dropbox/org/current/joel.org" "~/Dropbox/org/current/meeting_notes.org" "~/Dropbox/org/current/racer.org" "~/Dropbox/org/current/talks.org" "~/Dropbox/org/current/srtd.org")))
  '(package-selected-packages
    (quote
-    (org-caldav excorporate nadvice url-http-ntlm soap-client fsm csv-mode org-fancy-priorities flyspell-popup mu4e-maildirs-extension mu4e-alert ht org-fragtog ox-reveal web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data mmm-mode evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu evil undo-tree auctex spinner adaptive-wrap yapfify yaml-mode xterm-color ws-butler winum which-key web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org thrift stan-mode spaceline powerline smeargle smartparens shell-pop scad-mode rtags restart-emacs rainbow-delimiters qml-mode pyvenv pytest pyenv-mode py-isort popwin pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-mime org-download org-bullets open-junk-file neotree mwim multi-term move-text matlab-mode markdown-toc magit-gitflow magit-popup magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint julia-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js-doc indent-guide hydra lv hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md ggtags fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck pkg-info epl flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-unimpaired evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter git-commit with-editor transient evil-escape goto-chg eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav ein skewer-mode markdown-mode polymode deferred request websocket js2-mode simple-httpd dumb-jump doom-themes disaster diminish diff-hl define-word cython-mode company-tern dash-functional tern company-statistics company-c-headers company-auctex company-anaconda company column-enforce-mode coffee-mode cmake-mode cmake-ide levenshtein clean-aindent-mode clang-format bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed auctex-latexmk arduino-mode anaconda-mode pythonic f dash s aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup monokai-theme))))
+    (py-yapf drupal-mode phpunit phpcbf php-auto-yasnippets php-mode ob-ipython tikz pdf-tools key-chord ivy tablist bibtex-completion parsebib biblio biblio-core helm-bibtexkey helm-bibtex org-ref org-noter-pdftools org-noter xclip evil-mu4e org-caldav excorporate nadvice url-http-ntlm soap-client fsm csv-mode org-fancy-priorities flyspell-popup mu4e-maildirs-extension mu4e-alert ht org-fragtog ox-reveal web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data mmm-mode evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state iedit evil-exchange evil-ediff evil-args evil-anzu anzu evil undo-tree auctex spinner adaptive-wrap yapfify yaml-mode xterm-color ws-butler winum which-key web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill toc-org thrift stan-mode spaceline powerline smeargle smartparens shell-pop scad-mode rtags restart-emacs rainbow-delimiters qml-mode pyvenv pytest pyenv-mode py-isort popwin pip-requirements persp-mode pcre2el paradox orgit org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-mime org-download org-bullets open-junk-file neotree mwim multi-term move-text matlab-mode markdown-toc magit-gitflow magit-popup magit macrostep lorem-ipsum livid-mode live-py-mode linum-relative link-hint julia-mode json-mode json-snatcher json-reformat js2-refactor multiple-cursors js-doc indent-guide hydra lv hy-mode hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-pydoc helm-projectile projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md ggtags fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck pkg-info epl flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-unimpaired evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter git-commit with-editor transient evil-escape goto-chg eval-sexp-fu eshell-z eshell-prompt-extras esh-help elisp-slime-nav ein skewer-mode markdown-mode polymode deferred request websocket js2-mode simple-httpd dumb-jump doom-themes disaster diminish diff-hl define-word cython-mode company-tern dash-functional tern company-statistics company-c-headers company-auctex company-anaconda company column-enforce-mode coffee-mode cmake-mode cmake-ide levenshtein clean-aindent-mode clang-format bind-map bind-key auto-yasnippet yasnippet auto-highlight-symbol auto-dictionary auto-compile packed auctex-latexmk arduino-mode anaconda-mode pythonic f dash s aggressive-indent ace-window ace-link ace-jump-helm-line helm avy helm-core async ac-ispell auto-complete popup monokai-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

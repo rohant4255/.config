@@ -163,7 +163,7 @@ bindsym $mod+minus scratchpad show
 #bindsym $mod+s [title="^Sup ::"] scratchpad show
 
 # Key binding for gtd inbox
-bindsym $mod+z exec google-chrome --app https://docs.google.com/document/d/1VWzQoSRFo97lMcR-5UNc9tYtZMMGHR2uXa402WsquAg/edit 
+bindsym $mod+z exec google-chrome --app https://docs.google.com/document/d/1VWzQoSRFo97lMcR-5UNc9tYtZMMGHR2uXa402WsquAg/edit
 
 # Key binding for Chrome
 bindsym $mod+c exec google-chrome
@@ -190,6 +190,9 @@ bindsym $mod+x exec "xfce4-appfinder"
 # start windows
 bindsym $mod+v exec "vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx"
 
+# xfce launcher
+bindsym $mod+b exec "xdg-open ~"
+
 # Start windows on startup
 # exec vmplayer /media/thakker/Data/vms/Windows10/Windows\ 10\ x64.vmx
 
@@ -198,3 +201,6 @@ exec --no-startup-id nitrogen --restore
 
 # Swap alt and windows key on startup
 exec ~/.config/i3/keyswap.sh
+
+# Lock screen
+bindsym $mod+Control+Return exec "gnome-screensaver-command -l"
