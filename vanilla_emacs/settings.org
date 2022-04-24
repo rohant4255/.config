@@ -1,0 +1,77 @@
+#+title: Emacs Config File
+
+* Basic UI
+  
+#+begin_src emacs-lisp 
+(setq inhibit-startup-message t)
+
+(scroll-bar-mode -1)        ; Disable visible scrollbar
+(tool-bar-mode -1)          ; Disable the toolbar
+(tooltip-mode -1)           ; Disable tooltips
+(set-fringe-mode 10)        ; Give some breathing room
+
+(menu-bar-mode -1)            ; Disable the menu bar
+
+;; Set up the visible bell
+(setq visible-bell t)
+
+(load-theme 'tango-dark)
+;; (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
+#+end_src
+
+* Key Bindings
+** Vim-based window navigation
+#+begin_src emacs-lisp 
+  (global-set-key (kbd "C-j") 'evil-window-down) 
+  (global-set-key (kbd "C-k") 'evil-window-up)
+  (global-set-key (kbd "C-h") 'evil-window-left)
+  (global-set-key (kbd "C-l") 'evil-window-right)
+;;  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+;;  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+;;  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+;;  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+#+end_src
+** Shortcuts
+
+#+begin_src emacs-lisp 
+  (global-set-key (kbd "C-M-x") 'eval-buffer) 
+#+end_src
+
+* Code Completion
+** Ivy
+#+begin_src emacs-lisp 
+(use-package ivy
+  :ensure t
+  :diminish
+  :bind (("C-s" . swiper)
+         :map ivy-minibuffer-map
+         ("TAB" . ivy-alt-done)	
+         ("C-l" . ivy-alt-done)
+         ("C-j" . ivy-next-line)
+         ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ("C-k" . ivy-previous-line)
+         ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (ivy-mode 1))
+#+end_src
+  
+** Which Key
+#+begin_src emacs-lisp 
+(use-package which-key
+  :ensure t
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config 
+  (setq which-key-idle-delay 0.3))
+#+end_src
+
+
+
+* TODO List
+** Fix issue with Tab
+** Pane navigation
