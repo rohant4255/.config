@@ -20,6 +20,7 @@
 ;; (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
 #+end_src
 
+
 * Key Bindings
 ** Vim-based window navigation
 #+begin_src emacs-lisp 
@@ -27,6 +28,8 @@
   (global-set-key (kbd "C-k") 'evil-window-up)
   (global-set-key (kbd "C-h") 'evil-window-left)
   (global-set-key (kbd "C-l") 'evil-window-right)
+  (define-key evil-normal-state-map (kbd "H") 'previous-buffer)
+  (define-key evil-normal-state-map (kbd "L") 'next-buffer)
 ;;  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
 ;;  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
 ;;  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
@@ -35,30 +38,27 @@
 ** Shortcuts
 
 #+begin_src emacs-lisp 
-  (global-set-key (kbd "C-M-x") 'eval-buffer) 
+;;  (define-key evil-normal-state-map "K" (kbd "<prior>"))
+;;  (define-key evil-normal-state-map "J" (kbd "<next>"))
+  (define-key global-map (kbd "C-+") 'text-scale-increase)
+  (define-key global-map (kbd "C--") 'text-scale-decrease)
 #+end_src
 
+
 * Code Completion
-** Ivy
+** Helm completion
 #+begin_src emacs-lisp 
-(use-package ivy
+(use-package helm
   :ensure t
-  :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)	
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :config
-  (ivy-mode 1))
+  :demand
+  :bind (("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)
+         ("C-x b" . helm-buffers-list)
+         ("C-x c o" . helm-occur)) ;SC
+         ("M-y" . helm-show-kill-ring) ;SC
+         ("C-x r b" . helm-filtered-bookmarks) ;SC
+  :preface (require 'helm-config)
+  :config (helm-mode 1))
 #+end_src
   
 ** Which Key
@@ -72,6 +72,52 @@
 #+end_src
 
 
+* Org mode
+#+begin_src emacs-lisp 
+  ;;(define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
+  ;;(define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
+  (define-key global-map (kbd "C-RET") 'org-meta-return)
+  ;; Define subtree moving
+  ;; (define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
+  ;; (define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
+  ;; Add WAITING state to org-todos
+  (setq org-todo-keywords
+        '((sequence "TODO" "WAITING" "DONE")))
+  ;; Set bullets for lists
+  (setq org-bullets-bullet-list '("■" "◆" "▲" "▶"))
+  ;; Add Tags
+  (setq org-tag-alist '(("@meeting" . ?m) ("@home" . ?h) ("laptop" . ?l)))
+  ;; Customize org priorities
+  (setq org-default-priority ?D)
+  (setq org-lowest-priority ?E)
+  (setq org-highest-priority ?A)
+  ;; Colors for priorities
+  (setq org-priority-faces '((?A :foreground "red")
+    (?B :foreground "yellow")
+    (?C :foreground "blue")
+    (?E :foreground "green")))
+  ;; Set color
+  (setq org-agenda-with-colors t)
+  (use-package org-fancy-priorities
+    :ensure t
+    :hook
+    (org-mode . org-fancy-priorities-mode)
+    :config
+    (setq org-fancy-priorities-list '((?A . "❗")
+                                      (?B . "⮬")
+                                      (?C . "⮮")
+                                      (?E . "☕"))))
+  ;; Todo state colors
+  (setq org-todo-keyword-faces
+        '(("WAITING" . "gray")))
+  ;; Shortcut for urgent tasks
+  (defun todo-set-urgent()
+    (interactive)
+    (org-priority ?A)
+    (org-schedule :SCHEDULED "<today>")
+  )
+  (define-key global-map (kbd "M-p") 'todo-set-urgent)
+#+end_src
+
+
 * TODO List
-** Fix issue with Tab
-** Pane navigation
