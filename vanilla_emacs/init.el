@@ -17,7 +17,8 @@
 (setq use-package-always-ensure t)
 
 (require 'org)
-(org-babel-load-file "/home/thakker/.emacs.d/settings.org")
+(delete-file  (expand-file-name (concat user-emacs-directory "settings.el")))
+(org-babel-load-file (expand-file-name (concat user-emacs-directory "settings.org")))
 
 (use-package doom-modeline
   :ensure t
@@ -42,9 +43,7 @@
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode)) 
 
-
 ;; Org-babel
-
 (use-package org
   :ensure t
   :config
@@ -55,3 +54,16 @@
   :ensure t)
 (global-undo-tree-mode)
 (evil-set-undo-system 'undo-tree)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(undo-tree rainbow-delimiters evil doom-modeline which-key ivy use-package)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+)
