@@ -29,6 +29,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(helm-completion-style 'helm)
+ '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
    '(evil-collection org-bullets org-fancy-priorities helm undo-tree rainbow-delimiters evil doom-modeline which-key ivy use-package)))
 (custom-set-faces

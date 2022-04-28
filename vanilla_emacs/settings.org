@@ -39,6 +39,7 @@
  (setq org-confirm-babel-evaluate 'nil)
  #+end_src
 
+
 * Key Bindings
 ** Evil Mode
 #+begin_src emacs-lisp 
@@ -72,14 +73,38 @@
   (global-set-key (kbd "C-k") 'evil-window-up)
   (global-set-key (kbd "C-h") 'evil-window-left)
   (global-set-key (kbd "C-l") 'evil-window-right)
-  (define-key evil-normal-state-map (kbd "H") 'previous-buffer) 
-  (define-key evil-normal-state-map (kbd "L") 'next-buffer)
+
+  ;; Navigate buffers by skipping internal ones (e.g. *Messages*, *scratch*, etc.)
+  (defun next-code-buffer ()
+  (interactive)
+  (let (( bread-crumb (buffer-name) ))
+    (next-buffer)
+    (while
+        (and
+         (string-match-p "^\*" (buffer-name))
+         (not ( equal bread-crumb (buffer-name) )) )
+      (next-buffer))))
+  (defun previous-code-buffer ()
+  (interactive)
+  (let (( bread-crumb (buffer-name) ))
+    (previous-buffer)
+    (while
+        (and
+         (string-match-p "^\*" (buffer-name))
+         (not ( equal bread-crumb (buffer-name) )) )
+      (previous-buffer))))
+  (define-key evil-normal-state-map (kbd "H") 'previous-code-buffer) 
+  (define-key evil-normal-state-map (kbd "L") 'next-code-buffer)
 ;;  (define-key evil-normal-state-map (kbd "C-x C-x") 'kill-this-buffer) 
 ;;  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
 ;;  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
 ;;  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
 ;;  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 #+end_src
+
+#+RESULTS:
+: next-code-buffer
+
 ** Shortcuts
 
 #+begin_src emacs-lisp 
@@ -168,6 +193,7 @@
 #+end_src
 
 #+RESULTS:
+
 * TODO Create slides                                               :@meeting:
 
 #+begin_src emacs-lisp :eval yes 
