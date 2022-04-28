@@ -1,4 +1,5 @@
 #+title: Emacs Config File
+#+PROPERTY: header-args    :results silent
 
 * Basic UI
   
@@ -92,9 +93,6 @@
 ;;  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
 ;;  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 #+end_src
-
-#+RESULTS:
-: next-code-buffer
 
 ** Shortcuts
 
@@ -221,6 +219,22 @@
 ** Babel
 #+begin_src emacs-lisp 
  (setq org-confirm-babel-evaluate 'nil)
+#+end_src
+
+** Templates
+#+begin_src emacs-lisp 
+(use-package org-tempo
+  :ensure t
+  :init
+    (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("li" . "src lisp"))
+    (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
+    (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python"))
+    (add-to-list 'org-structure-template-alist '("go" . "src go"))
+    (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+    (add-to-list 'org-structure-template-alist '("json" . "src json")))
 #+end_src
 
 * Tasks
