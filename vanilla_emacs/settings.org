@@ -31,15 +31,6 @@
   :hook (prog-mode . rainbow-delimiters-mode)) 
 #+end_src
 
-
-** TODO test
-
-*** WAITING Babel
- #+begin_src emacs-lisp :eval yes 
- (setq org-confirm-babel-evaluate 'nil)
- #+end_src
-
-
 * Key Bindings
 ** Evil Mode
 #+begin_src emacs-lisp 
@@ -112,7 +103,6 @@
 ;;  (define-key evil-normal-state-map "J" (kbd "<next>"))
 #+end_src
 
-
 * Code Completion
 ** Helm completion
 #+begin_src emacs-lisp 
@@ -129,6 +119,44 @@
   :config (helm-mode 1))
 #+end_src
   
+** Company
+#+begin_src emacs-lisp 
+; turn off annoying tooltips
+(use-package company
+  :config (setq company-frontends nil)
+  :hook (after-init . global-company-mode))
+;; integrate with helm
+#+end_src
+
+#+RESULTS:
+
+** LSP mode
+#+begin_src emacs-lisp 
+(use-package lsp-mode
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (python-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally
+(use-package lsp-ui :commands lsp-ui-mode)
+;; if you are helm user
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+;; if you are ivy user
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+;; (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+;; optionally if you want to use debugger
+;; (use-package dap-mode)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+#+end_src
+
+#+RESULTS:
+
 ** Which Key
 #+begin_src emacs-lisp 
 (use-package which-key
@@ -138,7 +166,6 @@
   :config 
   (setq which-key-idle-delay 0.1))
 #+end_src
-
 
 * Org mode
 ** Todo
@@ -185,21 +212,21 @@
   (define-key global-map (kbd "M-p") 'todo-set-urgent)
 #+end_src
 
-** Keybindings                                                     :@meeting:
+** Keybindings
 #+begin_src emacs-lisp 
 (evil-define-key 'normal 'org-mode-map 
   "t" 'org-todo
   ",m" (kbd "C-c C-q m RET"))
 #+end_src
-
-#+RESULTS:
-
-* TODO Create slides                                               :@meeting:
-
-#+begin_src emacs-lisp :eval yes 
-(kbd "m RET")
+** Babel
+#+begin_src emacs-lisp 
+ (setq org-confirm-babel-evaluate 'nil)
 #+end_src
 
-#+RESULTS:
-: m
+* Tasks
+** TODO Fix evil-normal-state-map error
+** TODO Add auto-completion
+** TODO Background for babel
+
+
 
