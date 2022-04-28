@@ -3,7 +3,8 @@
 
 ;; Initialize package manager
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
+;;                         ("org" . "https://orgmode.org/elpa/")
+			 ("nongnu" . "https://elpa.nongnu.org/packages/")
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 (unless package-archive-contents
@@ -31,7 +32,7 @@
  '(helm-completion-style 'helm)
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(org-tempo company lsp-ivy helm-lsp lsp-ui lsp-mode evil-collection org-bullets org-fancy-priorities helm undo-tree rainbow-delimiters evil doom-modeline which-key ivy use-package)))
+   '(org-faces org-indent org-tempo company lsp-ivy helm-lsp lsp-ui lsp-mode evil-collection org-bullets org-fancy-priorities helm undo-tree rainbow-delimiters evil doom-modeline which-key ivy use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

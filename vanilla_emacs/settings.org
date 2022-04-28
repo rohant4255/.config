@@ -2,7 +2,6 @@
 #+PROPERTY: header-args    :results silent
 
 * Basic UI
-  
 #+begin_src emacs-lisp 
 (setq inhibit-startup-message t)
 (scroll-bar-mode -1)        ; Disable visible scrollbar
@@ -211,9 +210,11 @@
 #+end_src
 
 ** Keybindings
+
 #+begin_src emacs-lisp 
 (evil-define-key 'normal 'org-mode-map 
   "t" 'org-todo
+  ",n" 'org-toggle-narrow-to-subtree
   ",m" (kbd "C-c C-q m RET"))
 #+end_src
 ** Babel
@@ -224,7 +225,7 @@
 ** Templates
 #+begin_src emacs-lisp 
 (use-package org-tempo
-  :ensure t
+  :ensure nil
   :init
     (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
@@ -237,10 +238,56 @@
     (add-to-list 'org-structure-template-alist '("json" . "src json")))
 #+end_src
 
+** UI
+#+begin_src emacs-lisp 
+(custom-set-faces
+ '(org-block-begin-line
+   ((t (:background "#202020" :extend t))))
+ '(org-block
+   ((t (:background "#202020" :extend t))))
+ '(org-block-end-line
+   ((t (:background "#202020" :extend t))))
+ )
+;; (use-package org-indent
+;;   :ensure nil
+;;   :init
+;;   (add-hook 'org-mode-hook 'org-indent-mode))
+;; (use-package org-faces
+;;   :ensure nil
+;;   ;; Make sure org-indent face is available
+;;   :after org-indent
+;;   :init
+;;   ;; Increase the size of various headings
+;;   (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+;;   
+;;   (dolist (face '((org-level-1 . 1.2)
+;;                   (org-level-2 . 1.1)
+;;                   (org-level-3 . 1.05)
+;;                   (org-level-4 . 1.0)
+;;                   (org-level-5 . 1.1)
+;;                   (org-level-6 . 1.1)
+;;                   (org-level-7 . 1.1)
+;;                   (org-level-8 . 1.1)))
+;;     (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
+;; 
+;;   ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+;;   (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+;;   (set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+;;   (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+;;   (set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+;;   (set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+;;   (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+;;   (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+;;   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+;;   (set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+;; 
+;;   ;; Get rid of the background on column views
+;;   (set-face-attribute 'org-column nil :background nil)
+;;   (set-face-attribute 'org-column-title nil :background nil))
+#+end_src
+
 * Tasks
 ** TODO Fix evil-normal-state-map error
 ** TODO Add auto-completion
-** TODO Background for babel
-
-
-
+** DONE Background for babel
+** TODO Make modeline look good
