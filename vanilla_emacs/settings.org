@@ -1,5 +1,4 @@
 #+title: Emacs Config File
-#+HEADER: :tangle yes 
 
 * Basic UI
   
@@ -33,13 +32,20 @@
 #+end_src
 
 
+** TODO test
+
+*** WAITING Babel
+ #+begin_src emacs-lisp :eval yes 
+ (setq org-confirm-babel-evaluate 'nil)
+ #+end_src
+
 * Key Bindings
 ** Evil Mode
 #+begin_src emacs-lisp 
 ;; Evil mode
 (use-package evil
   :init
-  (setq evil-want-integration t)
+  (setq evil-want-integration nil)
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll nil)
   (setq evil-want-C-i-jump nil)
@@ -53,6 +59,12 @@
   :after evil
   :config
   (evil-collection-init))
+  
+;; Setup Undo tree
+(use-package undo-tree
+  :ensure t)
+(global-undo-tree-mode)
+(evil-set-undo-system 'undo-tree)
 #+end_src
 ** Vim-based window navigation
 #+begin_src emacs-lisp 
@@ -104,13 +116,13 @@
 
 
 * Org mode
+** Todo
 #+begin_src emacs-lisp 
 ;; Org-babel
 (use-package org
   :ensure t
   :config
   (setq org-hide-emphasis-markers nil))
-
   ;; (define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
   ;; (define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
   (define-key global-map (kbd "C-RET") 'org-meta-return)
@@ -146,14 +158,22 @@
     (org-schedule :SCHEDULED "<today>")
   )
   (define-key global-map (kbd "M-p") 'todo-set-urgent)
-
-;; Setup Undo tree
-(use-package undo-tree
-  :ensure t)
-(global-undo-tree-mode)
-(evil-set-undo-system 'undo-tree)
-;;(set-undo-system
 #+end_src
 
+** Keybindings                                                     :@meeting:
+#+begin_src emacs-lisp 
+(evil-define-key 'normal 'org-mode-map 
+  "t" 'org-todo
+  ",m" (kbd "C-c C-q m RET"))
+#+end_src
 
-* TODO List
+#+RESULTS:
+* TODO Create slides                                               :@meeting:
+
+#+begin_src emacs-lisp :eval yes 
+(kbd "m RET")
+#+end_src
+
+#+RESULTS:
+: m
+

@@ -20,7 +20,7 @@
 ;; Load settings.org
 (require 'org)
 (delete-file  (expand-file-name (concat user-emacs-directory "settings.el")))
-(org-babel-load-file (expand-file-name (concat user-emacs-directory "settings.org")))
+(org-babel-load-file (expand-file-name (concat user-emacs-directory "settings.org"))) :meetings:
 
 ;; Auto-generated code
 (custom-set-variables
