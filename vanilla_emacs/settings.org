@@ -233,7 +233,14 @@
 #+end_src
 ** Babel
 #+begin_src emacs-lisp 
- (setq org-confirm-babel-evaluate 'nil)
+  (setq org-confirm-babel-evaluate 'nil)
+  (setq org-edit-src-auto-save-idle-delay 0.1)
+  (setq org-src-window-setup 'current-window)
+
+  (general-define-key (kbd "C-c C-c") 'eval-buffer)
+  (general-define-key 
+    :keymaps 'org-src-mode-map 
+    (kbd "M-RET") 'org-edit-src-exit)
 #+end_src
 
 ** Templates
