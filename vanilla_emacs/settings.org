@@ -1,4 +1,4 @@
-#+title: Emacs Config File
+#+title: Config File
 #+PROPERTY: header-args    :results silent
 
 * Basic UI
@@ -31,6 +31,9 @@
 (use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode)) 
+
+;; Save previous place
+(save-place-mode 1)
 #+end_src
 
 * Key Bindings
@@ -88,18 +91,14 @@
       (previous-buffer))))
   (define-key evil-normal-state-map (kbd "H") 'previous-code-buffer) 
   (define-key evil-normal-state-map (kbd "L") 'next-code-buffer)
-;;  (define-key evil-normal-state-map (kbd "C-x C-x") 'kill-this-buffer) 
-;;  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-;;  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-;;  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-;;  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+  (define-key evil-normal-state-map (kbd "C-x C-x") 'kill-this-buffer) 
 #+end_src
 
 ** Shortcuts
 
 #+begin_src emacs-lisp 
-;;  (define-key evil-normal-state-map "K" (kbd "<prior>"))
-;;  (define-key evil-normal-state-map "J" (kbd "<next>"))
+  (define-key evil-normal-state-map "K" (kbd "<prior>"))
+  (define-key evil-normal-state-map "J" (kbd "<next>"))
 #+end_src
 
 * Code Completion
@@ -120,14 +119,14 @@
   
 ** Company
 #+begin_src emacs-lisp 
-; turn off annoying tooltips
-(use-package company
-  :config (setq company-frontends nil)
-  :hook (after-init . global-company-mode))
-;; integrate with helm
+  (use-package company
+    :ensure t
+    :config
+    (setq company-idle-delay 0.1)
+    (setq company-minimum-prefix-length 1)
+    (global-company-mode t)
+    (add-to-list 'company-backends 'company-elisp))
 #+end_src
-
-#+RESULTS:
 
 ** LSP mode
 #+begin_src emacs-lisp 
@@ -137,6 +136,7 @@
   (setq lsp-keymap-prefix "C-c l")
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (python-mode . lsp)
+         (elisp-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
@@ -153,9 +153,13 @@
 ;; (use-package dap-mode)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 #+end_src
-
-#+RESULTS:
-
+** Copilot 
+#+begin_src emacs-lisp
+;; (use-package copilot
+;;   :straight (:host github :repo "zerolfx/copilot.el"
+;;                    :files ("dist" "copilot.el"))
+;;   :ensure t)
+#+end_src
 ** Which Key
 #+begin_src emacs-lisp 
 (use-package which-key
@@ -178,8 +182,8 @@
   ;; (define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
   (define-key global-map (kbd "C-RET") 'org-meta-return)
   ;; Define subtree moving
-  ;; (define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
-  ;; (define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
+  (define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
+  (define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
   ;; Add WAITING state to org-todos
   (setq org-todo-keywords
         '((sequence "TODO" "WAITING" "DONE")))
@@ -212,12 +216,16 @@
 #+end_src
 
 ** Keybindings
-
 #+begin_src emacs-lisp 
-(evil-define-key 'normal 'org-mode-map 
-  "t" 'org-todo
-  ",n" 'org-toggle-narrow-to-subtree
-  ",m" (kbd "C-c C-q m RET"))
+  (define-key global-map (kbd "C-c t") 'org-capture)
+  (evil-define-key 'normal 'org-mode-map 
+    "t" 'org-todo
+    ",n" 'org-toggle-narrow-to-subtree
+    ",e" 'org-edit-special
+    ",i" 'org-clock-in
+    ",o" 'org-clock-out
+    "C-c t" 'org-capture
+    ",m" (kbd "C-c C-q m RET"))
 #+end_src
 ** Babel
 #+begin_src emacs-lisp 
@@ -286,9 +294,21 @@
    (set-face-attribute 'org-column nil :background nil)
    (set-face-attribute 'org-column-title nil :background nil))
 #+end_src
-
+** Capture Templates
+#+begin_src emacs-lisp
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
+         "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree "~/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")))
+#+end_src
 * Tasks
-** TODO Fix evil-normal-state-map error
-** TODO Add auto-completion
+** DONE Fix evil-normal-state-map error
+** DONE Add auto-completion
 ** DONE Background for babel
-** TODO Make modeline look good
+** DONE Make modeline look good
+** Org mode shortcuts
+*** DONE Clock in and out
+*** TODO Capture template
+** TODO Org agenda views
+** TODO C++ completion and code navigation

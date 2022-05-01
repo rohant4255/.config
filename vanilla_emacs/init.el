@@ -32,12 +32,12 @@
  '(helm-completion-style 'helm)
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(monokai-theme org-faces org-indent org-tempo company lsp-ivy helm-lsp lsp-ui lsp-mode evil-collection org-bullets org-fancy-priorities helm undo-tree rainbow-delimiters evil doom-modeline which-key ivy use-package)))
+   '(copilot monokai-theme org-faces org-indent org-tempo company lsp-ivy helm-lsp lsp-ui lsp-mode evil-collection org-bullets org-fancy-priorities helm undo-tree rainbow-delimiters evil doom-modeline which-key ivy use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-block ((t (:background "#202020" :extend t))))
- '(org-block-begin-line ((t (:background "#202020" :extend t))))
- '(org-block-end-line ((t (:background "#202020" :extend t)))))
+ '(org-block ((t (:background "#272727" :extend t))))
+ '(org-block-begin-line ((t (:background "#272727" :extend t))))
+ '(org-block-end-line ((t (:background "#272727" :extend t)))))
