@@ -62,11 +62,14 @@
   :ensure t)
 (global-undo-tree-mode)
 (evil-set-undo-system 'undo-tree)
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 #+end_src
 ** Vim-based window navigation
 #+begin_src emacs-lisp 
-  (global-set-key (kbd "C-j") 'evil-window-down) 
-  (global-set-key (kbd "C-k") 'evil-window-up)
+  (use-package general
+    :ensure t) ;; Use general to overwrite other minor mode keybinding.
+  (general-define-key :states 'normal :keymaps 'override "C-j" 'evil-window-down)
+  (general-define-key :states 'normal :keymaps 'override "C-k" 'evil-window-up)
   (global-set-key (kbd "C-h") 'evil-window-left)
   (global-set-key (kbd "C-l") 'evil-window-right)
 
@@ -184,6 +187,7 @@
   ;; Define subtree moving
   (define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
   (define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
+  (define-key org-mode-map (kbd "C-j") 'nil)
   ;; Add WAITING state to org-todos
   (setq org-todo-keywords
         '((sequence "TODO" "WAITING" "DONE")))
@@ -268,7 +272,7 @@
    :after org-indent
    :init
    ;; Increase the size of various headings
-   (set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
+   ;;(set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
    (dolist (face '((org-level-1 . 1.2)
                    (org-level-2 . 1.1)
                    (org-level-3 . 1.05)
@@ -276,8 +280,8 @@
                    (org-level-5 . 1.1)
                    (org-level-6 . 1.1)
                    (org-level-7 . 1.1)
-                   (org-level-8 . 1.1)))
-     (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
+                   (org-level-8 . 1.1))))
+   ;;  (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
  
    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
    (set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
