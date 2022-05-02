@@ -210,6 +210,8 @@
   (define-key evil-normal-state-map (kbd "H") 'previous-code-buffer) 
   (define-key evil-normal-state-map (kbd "L") 'next-code-buffer)
   (define-key evil-normal-state-map (kbd "C-x C-x") 'kill-this-buffer) 
+  (define-key evil-normal-state-map (kbd ",j") 'evil-jump-forward) 
+  (define-key evil-normal-state-map (kbd ",k") 'evil-jump-backward) 
 #+end_src
 
 ** Shortcuts
