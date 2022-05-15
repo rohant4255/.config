@@ -32,7 +32,7 @@
  '(helm-completion-style 'helm)
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(treemacs-tab-bar treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs helm-catkin general copilot monokai-theme org-faces org-indent org-tempo company lsp-ivy helm-lsp lsp-ui lsp-mode evil-collection org-bullets org-fancy-priorities helm undo-tree rainbow-delimiters evil doom-modeline which-key ivy use-package)))
+   '(org-download treemacs-tab-bar treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile treemacs-evil treemacs helm-catkin general copilot monokai-theme org-faces org-indent org-tempo company lsp-ivy helm-lsp lsp-ui lsp-mode evil-collection org-bullets org-fancy-priorities helm undo-tree rainbow-delimiters evil doom-modeline which-key ivy use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

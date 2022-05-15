@@ -430,11 +430,31 @@
 ** Capture Templates
 #+begin_src emacs-lisp
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/org/gtd.org" "Tasks")
-         "* TODO %?\n  %i\n  %a")
-        ("j" "Journal" entry (file+datetree "~/org/journal.org")
-         "* %?\nEntered on %U\n  %i\n  %a")))
+      '(("e" "Todo" entry (file+headline "~/org/eels.org" "Tasks")
+         "* TODO %?\n")
+        ("r" "Todo" entry (file+headline "~/org/racer.org" "Tasks")
+         "* TODO %?\n")
+        ("i" "Todo" entry (file+headline "~/org/inbox.org" "Tasks")
+         "* TODO %?\n")))
 #+end_src
+** Screenshots
+#+begin_src emacs-lisp
+(use-package org-download
+   :after org
+   :defer nil
+   :custom
+   (org-download-method 'directory)
+   (org-download-image-dir "images")
+   (org-download-heading-lvl nil)
+   (org-download-timestamp "%Y%m%d-%H%M%S_")
+   (org-image-actual-width 300)
+   (org-download-screenshot-method "/usr/local/bin/pngpaste %s")
+   :bind
+   ("C-M-y" . org-download-screenshot)
+   :config
+   (require 'org-download))
+#+end_src
+
 * Tasks
 ** DONE Fix evil-normal-state-map error
 ** DONE Add auto-completion
@@ -443,8 +463,8 @@
 ** Org mode shortcuts
 *** DONE Clock in and out
 *** TODO Capture template
-** TODO Org agenda views
 ** TODO C++ completion and code navigation
+** TODO Insert screenshot in org mode
 
 
 
