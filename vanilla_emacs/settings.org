@@ -149,7 +149,7 @@
   :after (treemacs)
   :ensure t
   :config (treemacs-set-scope-type 'Tabs))
-(treemacs)
+;; (treemacs)
 #+end_src
 * Key Bindings
 ** Evil Mode
@@ -347,7 +347,11 @@
     ",i" 'org-clock-in
     ",o" 'org-clock-out
     "C-c t" 'org-capture
+    ",s" 'org-schedule
+    ",c" 'org-toggle-checkbox
     ",m" (kbd "C-c C-q m RET"))
+  (define-key org-mode-map (kbd "M-h") 'org-promote-subtree)
+  (define-key org-mode-map (kbd "M-l") 'org-demote-subtree)
 #+end_src
 ** Babel
 #+begin_src emacs-lisp 
@@ -441,3 +445,10 @@
 *** TODO Capture template
 ** TODO Org agenda views
 ** TODO C++ completion and code navigation
+
+
+
+
+
+
+
