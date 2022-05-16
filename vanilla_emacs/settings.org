@@ -298,43 +298,43 @@
 (use-package org
   :ensure t
   :config
-  (setq org-hide-emphasis-markers nil))
-  ;; (define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
-  ;; (define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
-  (define-key global-map (kbd "C-RET") 'org-meta-return)
-  ;; Define subtree moving
-  (define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
-  (define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
-  (define-key org-mode-map (kbd "C-j") 'nil)
-  ;; Add WAITING state to org-todos
-  (setq org-todo-keywords
-        '((sequence "TODO" "WAITING" "DONE")))
-  ;; Set bullets for lists
- (use-package org-bullets
-    :hook (org-mode . org-bullets-mode))
-  ;; Add Tags
-  (setq org-tag-alist '(("@meeting" . ?m) ("@home" . ?h) ("laptop" . ?l)))
-  ;; Customize org priorities
-  (setq org-default-priority ?D)
-  (setq org-lowest-priority ?E)
-  (setq org-highest-priority ?A)
-  ;; Colors for priorities
-  (setq org-priority-faces '((?A :foreground "red")
-    (?B :foreground "yellow")
-    (?C :foreground "blue")
-    (?E :foreground "green")))
-  ;; Set color
-  (setq org-agenda-with-colors t)
-  ;; Todo state colors
-  (setq org-todo-keyword-faces
-        '(("WAITING" . "gray")))
-  ;; Shortcut for urgent tasks
-  (defun todo-set-urgent()
-    (interactive)
-    (org-priority ?A)
-    (org-schedule :SCHEDULED "<today>")
-  )
-  (define-key global-map (kbd "M-p") 'todo-set-urgent)
+(setq org-hide-emphasis-markers nil))
+;; (define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
+;; (define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
+(define-key global-map (kbd "C-RET") 'org-meta-return)
+;; Define subtree moving
+(define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
+(define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
+(define-key org-mode-map (kbd "C-j") 'nil)
+;; Add WAITING state to org-todos
+(setq org-todo-keywords
+      '((sequence "TODO" "WAITING" "DONE")))
+;; Set bullets for lists
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
+;; Add Tags
+(setq org-tag-alist '(("@side" . ?m) ("@car" . ?h) ("personal" . ?l)))
+;; Customize org priorities
+(setq org-default-priority ?C)
+(setq org-lowest-priority ?D)
+(setq org-highest-priority ?A)
+;; Colors for priorities
+(setq org-priority-faces '((?A :foreground "red")
+  (?B :foreground "yellow")
+  (?C :foreground "blue")
+  (?E :foreground "green")))
+;; Set color
+(setq org-agenda-with-colors t)
+;; Todo state colors
+(setq org-todo-keyword-faces
+      '(("WAITING" . "gray")))
+;; Shortcut for urgent tasks
+(defun todo-set-urgent()
+  (interactive)
+  (org-priority ?A)
+  (org-schedule :SCHEDULED "<today>")
+)
+(define-key global-map (kbd "M-p") 'todo-set-urgent)
 #+end_src
 
 ** Keybindings
@@ -348,10 +348,11 @@
     ",o" 'org-clock-out
     "C-c t" 'org-capture
     ",s" 'org-schedule
-    ",c" 'org-toggle-checkbox
-    ",m" (kbd "C-c C-q m RET"))
+    ",m" 'org-set-tags-command
+    ",c" 'org-toggle-checkbox)
+    ;; ",m" (kbd "C-c C-q m RET"))
   (define-key org-mode-map (kbd "M-h") 'org-promote-subtree)
-  (define-key org-mode-map (kbd "M-l") 'org-demote-subtree)
+  (define-key org-mode-map (kbd "M-l") 'org-demote-subtree)  
 #+end_src
 ** Babel
 #+begin_src emacs-lisp 
@@ -402,14 +403,14 @@
    :init
    ;; Increase the size of various headings
    ;;(set-face-attribute 'org-document-title nil :font "Iosevka Aile" :weight 'bold :height 1.3)
-   (dolist (face '((org-level-1 . 1.2)
-                   (org-level-2 . 1.1)
-                   (org-level-3 . 1.05)
-                   (org-level-4 . 1.0)
-                   (org-level-5 . 1.1)
-                   (org-level-6 . 1.1)
-                   (org-level-7 . 1.1)
-                   (org-level-8 . 1.1))))
+   ;; (dolist (face '((org-level-1 . 1.2)
+   ;;                 (org-level-2 . 1.1)
+   ;;                 (org-level-3 . 1.05)
+   ;;                 (org-level-4 . 1.0)
+   ;;                 (org-level-5 . 1.1)
+   ;;                 (org-level-6 . 1.1)
+   ;;                 (org-level-7 . 1.1)
+   ;;                 (org-level-8 . 1.1))))
    ;;  (set-face-attribute (car face) nil :font "Iosevka Aile" :weight 'medium :height (cdr face)))
  
    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
@@ -426,6 +427,62 @@
    ;; Get rid of the background on column views
    (set-face-attribute 'org-column nil :background nil)
    (set-face-attribute 'org-column-title nil :background nil))
+
+  #+end_src
+** Agenda views
+#+begin_src emacs-lisp 
+  ;; Agenda Files
+  (with-eval-after-load 'org (setq org-agenda-files
+                                   (file-expand-wildcards "~/org/current/*.org")))
+  (with-eval-after-load 'org (setq org-agenda-window-setup
+                                   'current-window))
+  ;; Custom Agenda View                                
+  (setq org-agenda-custom-commands
+    '(("c" "Schedule and Tasks"
+      ;; ((tags "PRIORITY=\"A\""
+      ;;        ((org-agenda-skip-function
+      ;;          '(or (org-agenda-skip-entry-if 'todo 'done)
+      ;;               (org-agenda-skip-entry-if 'nil 'scheduled)))
+      ;;         (org-agenda-overriding-header "Today")
+      ;;         ))
+       ((agenda ""
+               ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                (org-agenda-entry-types '(:scheduled :deadline))))
+       ;; (tags "PRIORITY=\"B\""
+       ;;       ((org-agenda-skip-function
+       ;;         '(or (org-agenda-skip-entry-if 'todo 'done)
+       ;;              (org-agenda-skip-entry-if 'nil 'scheduled)))
+       ;;        (org-agenda-overriding-header "This Week")))
+       (alltodo ""
+                ((org-agenda-skip-function
+                  '(or (org-agenda-skip-entry-if 'todo 'done)
+                       (org-agenda-skip-if nil '(scheduled deadline))))
+                 (org-agenda-sorting-strategy '(priority-down todo-state-up))
+                 )))
+      ;; ((org-agenda-compact-blocks t))
+       ((org-agenda-skip-deadline-prewarning-if-scheduled t))
+       )
+      ("d" "Urgent Tasks"
+       ((tags-todo "PRIORITY=\"A\"&SCHEDULED<=\"<today>\""
+              ((org-agenda-span 'day)
+               (org-agenda-skip-function
+                '(or (org-agenda-skip-entry-if 'todo '("DONE" "WAITING"))
+                     nil))
+               ))))
+      ))
+  ;; Shortcut for custom agenda view
+  (global-set-key (kbd "C-@") '(lambda () (interactive) (org-agenda nil "c")))
+  ;; Set color
+  (setq org-agenda-with-colors t)
+  (use-package org-fancy-priorities
+    :ensure t
+    :hook
+    (org-mode . org-fancy-priorities-mode)
+    :config
+    (setq org-fancy-priorities-list '((?A . "❗")
+                                  (?B . "⮬")
+                                  ;; (?C . "⮮")
+                                  (?D . "☕"))))
 #+end_src
 ** Capture Templates
 #+begin_src emacs-lisp
