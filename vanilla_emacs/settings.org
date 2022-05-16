@@ -342,6 +342,7 @@
   (define-key global-map (kbd "C-c t") 'org-capture)
   (evil-define-key 'normal 'org-mode-map 
     "t" 'org-todo
+    ",t" 'org-show-todo-tree
     ",n" 'org-toggle-narrow-to-subtree
     ",e" 'org-edit-special
     ",i" 'org-clock-in
