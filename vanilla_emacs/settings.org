@@ -313,7 +313,7 @@
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 ;; Add Tags
-(setq org-tag-alist '(("@side" . ?m) ("@car" . ?h) ("personal" . ?l)))
+(setq org-tag-alist '(("@side" . ?s) ("@car" . ?c) ("personal" . ?p)))
 ;; Customize org priorities
 (setq org-default-priority ?C)
 (setq org-lowest-priority ?D)
@@ -337,23 +337,39 @@
 (define-key global-map (kbd "M-p") 'todo-set-urgent)
 #+end_src
 
-** Keybindings
+** TODO Keybindings
 #+begin_src emacs-lisp 
+  ;; Evil for org mode
+  (use-package evil-org
+    :ensure t
+    :after org
+    :hook (org-mode . (lambda () evil-org-mode))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
+  ;; Org capture
   (define-key global-map (kbd "C-c t") 'org-capture)
   (evil-define-key 'normal 'org-mode-map 
     "t" 'org-todo
-    ",t" 'org-show-todo-tree
+    ",v" 'org-show-todo-tree
     ",n" 'org-toggle-narrow-to-subtree
     ",e" 'org-edit-special
     ",i" 'org-clock-in
     ",o" 'org-clock-out
     "C-c t" 'org-capture
     ",s" 'org-schedule
-    ",m" 'org-set-tags-command
+    ",t" 'org-set-tags-command
     ",c" 'org-toggle-checkbox)
     ;; ",m" (kbd "C-c C-q m RET"))
-  (define-key org-mode-map (kbd "M-h") 'org-promote-subtree)
-  (define-key org-mode-map (kbd "M-l") 'org-demote-subtree)  
+  ;; (define-key org-mode-map (kbd "M-h") 'org-promote-subtree)
+  ;; (define-key org-mode-map (kbd "M-l") 'org-demote-subtree)  
+  (evil-define-key 'normal 'org-agenda-mode-map 
+    ",r" 'org-refile
+    ",i" 'org-clock-in
+    ",o" 'org-clock-out
+    ",s" 'org-schedule
+    ",t" 'org-set-tags-command
+    ",c" 'org-toggle-checkbox)
 #+end_src
 ** Babel
 #+begin_src emacs-lisp 
@@ -437,6 +453,11 @@
                                    (file-expand-wildcards "~/org/current/*.org")))
   (with-eval-after-load 'org (setq org-agenda-window-setup
                                    'current-window))
+  ;; Add refile targets
+  (setq org-refile-use-outline-path 'file)
+  (setq org-refile-targets
+      '((nil :maxlevel . 2)
+        (org-agenda-files :maxlevel . 2)))
   ;; Custom Agenda View                                
   (setq org-agenda-custom-commands
     '(("c" "Schedule and Tasks"
