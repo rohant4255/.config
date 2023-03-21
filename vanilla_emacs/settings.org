@@ -1,6 +1,23 @@
 #+title: Config File
 #+PROPERTY: header-args    :results silent
 
+* Setup
+#+begin_src emacs-lisp 
+;; Install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+(straight-use-package 'use-package)
+#+end_src
 * Basic UI
 ** Visual
 #+begin_src emacs-lisp 
@@ -37,6 +54,7 @@
 #+end_src
 
 ** Dir Navigation
+*** Treemacs
 #+begin_src emacs-lisp
 (use-package treemacs
   :ensure t
@@ -148,7 +166,10 @@
   :after (treemacs)
   :ensure t
   :config (treemacs-set-scope-type 'Tabs))
-;; (treemacs)
+#+end_src
+** Fuzzy file search
+#+begin_src emacs-lisp 
+()
 #+end_src
 * Key Bindings
 ** Evil Mode
@@ -168,6 +189,7 @@
 
 (use-package evil-collection
   :after evil
+  :ensure t
   :config
   (evil-collection-init))
   
@@ -222,21 +244,52 @@
 * Code Completion
 ** Helm completion
 #+begin_src emacs-lisp 
-  (use-package helm
-    :ensure t
-    :demand
-    :bind (("M-x" . helm-M-x)
-           ("C-x C-f" . helm-find-files)
-           ("C-x b" . helm-buffers-list)
-           ("C-x c o" . helm-occur)) ;SC
-           ("M-y" . helm-show-kill-ring) ;SC
-           ("C-x r b" . helm-filtered-bookmarks) ;SC
-    :preface (require 'helm-config)
-    :config (helm-mode 1))
-  (use-package helm-catkin
-    :ensure t)
+   (use-package helm
+     :ensure t
+     :demand
+     :bind (("M-x" . helm-M-x)
+            ("C-x C-f" . helm-find-files)
+            ("C-x b" . helm-buffers-list)
+            ("C-x c o" . helm-occur)) ;SC
+            ("M-y" . helm-show-kill-ring) ;SC
+            ("C-x r b" . helm-filtered-bookmarks) ;SC
+     :preface (require 'helm-config)
+     :config (helm-mode 1))
+   (use-package helm-catkin
+     :ensure t)
+   ;; Avoid weird window splits during pop-up: https://github.com/syl20bnr/spacemacs/issues/7446
+   (with-eval-after-load "helm"
+       (defun helm-persistent-action-display-window (&optional split-onewindow)
+         "Return the window that will be used for persistent action.
+ If SPLIT-ONEWINDOW is non-`nil' window is split in persistent action."
+         (with-helm-window
+          (setq helm-persistent-action-display-window (get-mru-window)))))
 #+end_src
-  
+** Counsel
+#+begin_src emacs-lisp 
+;; (ivy-mode)
+;; (setq ivy-use-virtual-buffers t)
+;; (setq enable-recursive-minibuffers t)
+;; ;; enable this if you want `swiper' to use it
+;; ;; (setq search-default-mode #'char-fold-to-regexp)
+;; (global-set-key "\C-s" 'swiper)
+;; (global-set-key (kbd "C-c C-r") 'ivy-resume)
+;; (global-set-key (kbd "<f6>") 'ivy-resume)
+;; (global-set-key (kbd "M-x") 'counsel-M-x)
+;; (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;; (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+;; (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+;; (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+;; (global-set-key (kbd "<f1> l") 'counsel-find-library)
+;; (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+;; (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+;; (global-set-key (kbd "C-c g") 'counsel-git)
+;; (global-set-key (kbd "C-c j") 'counsel-git-grep)
+;; (global-set-key (kbd "C-c k") 'counsel-ag)
+;; (global-set-key (kbd "C-x l") 'counsel-locate)
+;; (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+;; (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)  
+#+end_src
 ** Company
 #+begin_src emacs-lisp 
   (use-package company
@@ -248,13 +301,6 @@
     (add-to-list 'company-backends 'company-elisp))
 #+end_src
 
-** Copilot 
-#+begin_src emacs-lisp
-;; (use-package copilot
-;;   :straight (:host github :repo "zerolfx/copilot.el"
-;;                    :files ("dist" "copilot.el"))
-;;   :ensure t)
-#+end_src
 ** Which Key
 #+begin_src emacs-lisp 
 (use-package which-key
@@ -290,6 +336,25 @@
 ;; optionally if you want to use debugger
 ;; (use-package dap-mode)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+#+end_src
+** Copilot
+#+begin_src emacs-lisp 
+;; Install plugin if required
+
+(use-package copilot
+  :init
+  :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :ensure t)
+;; Enable by default
+(add-hook 'prog-mode-hook 'copilot-mode)
+;; Set keybinding
+(with-eval-after-load 'company
+  ;; disable inline previews
+  (delq 'company-preview-if-just-one-frontend company-frontends))
+(define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+(define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+;; (define-key evil-normal-state-map (kbd "C-n") 'copilot-next-completion)
+;; (define-key evil-normal-state-map (kbd "C-p") 'copilot-previous-completion)
 #+end_src
 * Org mode
 ** Todo
