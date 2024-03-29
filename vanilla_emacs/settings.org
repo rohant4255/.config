@@ -12,7 +12,6 @@
 (menu-bar-mode -1)            ; Disable the menu bar
 
 ;; Set up the visible bell
-(setq visible-bell t)
 (load-theme 'tango-dark)
 ;; (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
 (setq vc-follow-symlinks t) ;; Don't promt to follow symlinks
@@ -79,17 +78,17 @@
 * Code Completion
 ** Helm completion
 #+begin_src emacs-lisp 
-(use-package helm
-  :ensure t
-  :demand
-  :bind (("M-x" . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("C-x b" . helm-buffers-list)
-         ("C-x c o" . helm-occur)) ;SC
-         ("M-y" . helm-show-kill-ring) ;SC
-         ("C-x r b" . helm-filtered-bookmarks) ;SC
-  :preface (require 'helm-config)
-  :config (helm-mode 1))
+;; (use-package helm
+;;   :ensure t
+;;   :demand
+;;   :bind (("M-x" . helm-M-x)
+;;          ("C-x C-f" . helm-find-files)
+;;          ("C-x b" . helm-buffers-list)
+;;          ("C-x c o" . helm-occur)) ;SC
+;;          ("M-y" . helm-show-kill-ring) ;SC
+;;          ("C-x r b" . helm-filtered-bookmarks) ;SC
+;;   :preface (require 'helm-config)
+;;   :config (helm-mode 1))
 #+end_src
   
 ** Which Key
@@ -111,15 +110,21 @@
   :config
   (setq org-hide-emphasis-markers nil))
 
-  ;; (define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
-  ;; (define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
+  (define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
+  (define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
   (define-key global-map (kbd "C-RET") 'org-meta-return)
   ;; Define subtree moving
-  ;; (define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
-  ;; (define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
+  (define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
+  (define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
   ;; Add WAITING state to org-todos
   (setq org-todo-keywords
         '((sequence "TODO" "WAITING" "DONE")))
+  ;; Set keybinding for todo state toggle "t" in normal mode of evil
+  (define-key evil-normal-state-map (kbd "t") 'org-todo)
+  ;; Set keybinding for inserting date --> ", ." in normal mode of evil
+  (define-key evil-normal-state-map (kbd ", .") 'org-time-stamp)
+  ;; Set keybinding for inserting deadline --> ", ." in normal mode of evil
+  (define-key evil-normal-state-map (kbd ", d") 'org-deadline)
   ;; Set bullets for lists
  (use-package org-bullets
     :hook (org-mode . org-bullets-mode))
