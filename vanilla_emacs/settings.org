@@ -11,24 +11,43 @@
 (set-fringe-mode 10)        ; Give some breathing room
 (menu-bar-mode -1)            ; Disable the menu bar
 
-;; Set up the visible bell
-(load-theme 'tango-dark)
-;; (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
 (setq vc-follow-symlinks t) ;; Don't promt to follow symlinks
 
-;; Add line numbers
-(column-number-mode)
-(global-display-line-numbers-mode t)
-
-(use-package doom-modeline
+;; Sublime text theme
+(use-package monokai-theme
   :ensure t
-  :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
+  :config
+  (load-theme 'monokai t))
+
+;; Add line numbers
+(global-linum-mode 1)
 
 ;; Rainbow Delimiters
 (use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode)) 
+
+;; Completion
+(use-package company
+  :ensure t
+  :init
+  (setq company-idle-delay 0
+        company-minimum-prefix-length 1
+        company-tooltip-limit 10)
+  :config
+  (global-company-mode t))
+
+(use-package company-box
+  :ensure t
+  :hook (company-mode . company-box-mode))
+  
+;; Modeline 
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
+(use-package all-the-icons
+  :ensure t)
+(setq doom-modeline-height 25)
 #+end_src
 
 
@@ -67,8 +86,8 @@
 ;;  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
 ;;  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 #+end_src
-** Shortcuts
 
+** Shortcuts
 #+begin_src emacs-lisp 
 ;;  (define-key evil-normal-state-map "K" (kbd "<prior>"))
 ;;  (define-key evil-normal-state-map "J" (kbd "<next>"))
@@ -102,7 +121,7 @@
 #+end_src
 
 
-* Org mode
+* [#D] Org mode
 #+begin_src emacs-lisp 
 ;; Org-babel
 (use-package org
@@ -125,6 +144,8 @@
   (define-key evil-normal-state-map (kbd ", .") 'org-time-stamp)
   ;; Set keybinding for inserting deadline --> ", ." in normal mode of evil
   (define-key evil-normal-state-map (kbd ", d") 'org-deadline)
+  ;; Export to pdf for beamer
+  (define-key evil-normal-state-map (kbd ", e") 'org-beamer-export-to-pdf)
   ;; Set bullets for lists
  (use-package org-bullets
     :hook (org-mode . org-bullets-mode))
@@ -158,6 +179,53 @@
 (global-undo-tree-mode)
 (evil-set-undo-system 'undo-tree)
 ;;(set-undo-system
+
+;; Petty priorities
+(use-package org-fancy-priorities
+  :ensure t
+  :diminish
+  :hook (org-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list 
+        (list (propertize "!" 'face '(:height 1.5 :weight bold))
+              (propertize "⬆" 'face '(:height 1.5))
+              (propertize "⬇" 'face '(:height 1.5))
+              (propertize "☕" 'face '(:height 1.5)))))
+	  
+;; Inserting images
+(use-package xclip
+  :ensure t
+  :config
+  (xclip-mode 1))
+
+(use-package org-download
+  :ensure t
+  :after org
+  :bind (:map org-mode-map
+         ("C-c s" . org-download-clipboard)))
+
+;; Inline images
+(setq org-image-actual-width nil)
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd ", i") 'org-toggle-inline-images))
+
+
+;; Open files externally
+(setq org-file-apps
+      (append '((auto-mode . emacs)
+                ("\\.mm\\'" . default)
+                ("\\.x?html?\\'" . default)
+                ("\\.pdf\\'" . "evince %s")
+                ("\\.png\\'" . "eog %s")
+                ("\\.jpg\\'" . "eog %s")
+                ("\\.jpeg\\'" . "eog %s")
+                ("\\.gif\\'" . "eog %s"))
+              org-file-apps))
+
+;; Capture template
+(setq org-capture-templates
+      '(("t" "Todo" entry (file "~/Dropbox/Documents/Orgzly/inbox.org")
+         "* TODO %?\n")))
 #+end_src
 
 

@@ -1,5 +1,5 @@
-# Set Alias'
-#alias gs='git status '
+# Set Alias
+alias gs='git status '
 alias ga='git add '
 alias gb='git branch '
 alias gc='git commit'
@@ -13,8 +13,9 @@ alias l='ls -CF'
 alias vimg="emacsclient -c"
 alias vim="emacsclient -nw -c $1"
 alias r='ranger'
-alias oc="emacsclient -nw -c /home/traj/Dropbox/org/current/inbox\.org"
-alias org="cd /home/traj/Dropbox/org/current/"
+alias oc="emacsclient -nw -c ~/Dropbox/Documents/Orgzly/inbox.org"
+alias org="cd ~/Dropbox/Documents/Orgzly"
+alias todo='emacs --eval "(progn (find-file \"~/Dropbox/Documents/Orgzly/inbox.org\") (org-capture nil \"t\"))"'
 alias gp='gitcheck -u'
 #alias ll="colorls -lA --sd"
 #alias ls="colorls --gs --sd"
