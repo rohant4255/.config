@@ -10,10 +10,10 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 # vim() { nohup emacsclient -c -a emacs $@ &; disown; sleep 0.5; exit;}
-alias vimg="emacsclient -c"
+alias vimg="emacsclient -c $1"
 alias vim="emacsclient -nw -c $1"
 alias r='ranger'
-alias oc="emacsclient -nw -c ~/Dropbox/Documents/Orgzly/inbox.org"
+alias oc="emacsclient ~/Dropbox/Documents/Orgzly/inbox.org -c"
 alias org="cd ~/Dropbox/Documents/Orgzly"
 alias todo='emacs --eval "(progn (find-file \"~/Dropbox/Documents/Orgzly/inbox.org\") (org-capture nil \"t\"))"'
 alias gp='gitcheck -u'

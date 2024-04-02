@@ -93,8 +93,8 @@
 
 ** Shortcuts
 #+begin_src emacs-lisp 
-;;  (define-key evil-normal-state-map "K" (kbd "<prior>"))
-;;  (define-key evil-normal-state-map "J" (kbd "<next>"))
+  ;;  (define-key evil-normal-state-map "K" (kbd "<prior>"))
+  ;;  (define-key evil-normal-state-map "J" (kbd "<next>"))
 #+end_src
 
 
@@ -277,29 +277,3 @@
 
 #+RESULTS:
 | my/org-agenda-mode-setup |
-
-* Auto Format Lisp code
-
-#+begin_src emacs-lisp 
-(defun format-lisp-code (code)
-  ;; Add your formatting logic here. This is a placeholder.
-  ;; For simplicity, it just returns the code as-is.
-  code)
-
-(let ((code (read-line)))
-  (format t "~A" (format-lisp-code code)))
- 
-(defun my/format-lisp-babel-blocks ()
-  "Format all Common Lisp Babel blocks in the current buffer."
-  (interactive)
-  (org-babel-map-src-blocks nil
-    (when (string= lang "lisp") ;; Check if it's a Common Lisp block
-      (let ((formatted-code (shell-command-to-string (format "echo %S | sbcl --script ~/lisp-format.lisp" (org-element-property :value src-block)))))
-        (org-edit-src-code)
-        (erase-buffer)
-        (insert formatted-code)
-        (org-edit-src-exit)))))
-
-(add-hook 'org-mode-hook (lambda ()
-                           (add-hook 'before-save-hook #'my/format-lisp-babel-blocks nil 'local)))
-#+end_src
