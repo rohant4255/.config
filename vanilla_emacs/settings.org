@@ -32,15 +32,15 @@
   :ensure t
   :init
   (setq company-idle-delay 0
-        company-minimum-prefix-length 1
-        company-tooltip-limit 10)
+  company-minimum-prefix-length 1
+  company-tooltip-limit 10)
   :config
   (global-company-mode t))
 
 (use-package company-box
   :ensure t
   :hook (company-mode . company-box-mode))
-  
+
 ;; Modeline 
 (use-package doom-modeline
   :ensure t
@@ -48,6 +48,10 @@
 (use-package all-the-icons
   :ensure t)
 (setq doom-modeline-height 25)
+
+;; Autosave
+(setq auto-save-default t)
+
 #+end_src
 
 
@@ -129,49 +133,53 @@
   :config
   (setq org-hide-emphasis-markers nil))
 
-  (define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
-  (define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
-  (define-key global-map (kbd "C-RET") 'org-meta-return)
-  ;; Define subtree moving
-  (define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
-  (define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
-  ;; Add WAITING state to org-todos
-  (setq org-todo-keywords
-        '((sequence "TODO" "WAITING" "DONE")))
-  ;; Set keybinding for todo state toggle "t" in normal mode of evil
-  (define-key evil-normal-state-map (kbd "t") 'org-todo)
-  ;; Set keybinding for inserting date --> ", ." in normal mode of evil
-  (define-key evil-normal-state-map (kbd ", .") 'org-time-stamp)
-  ;; Set keybinding for inserting deadline --> ", ." in normal mode of evil
-  (define-key evil-normal-state-map (kbd ", d") 'org-deadline)
-  ;; Export to pdf for beamer
-  (define-key evil-normal-state-map (kbd ", e") 'org-beamer-export-to-pdf)
-  ;; Set bullets for lists
- (use-package org-bullets
-    :hook (org-mode . org-bullets-mode))
-  ;; Add Tags
-  (setq org-tag-alist '(("@meeting" . ?m) ("@home" . ?h) ("laptop" . ?l)))
-  ;; Customize org priorities
-  (setq org-default-priority ?D)
-  (setq org-lowest-priority ?E)
-  (setq org-highest-priority ?A)
-  ;; Colors for priorities
-  (setq org-priority-faces '((?A :foreground "red")
-    (?B :foreground "yellow")
-    (?C :foreground "blue")
-    (?E :foreground "green")))
-  ;; Set color
-  (setq org-agenda-with-colors t)
-  ;; Todo state colors
-  (setq org-todo-keyword-faces
-        '(("WAITING" . "gray")))
-  ;; Shortcut for urgent tasks
-  (defun todo-set-urgent()
-    (interactive)
-    (org-priority ?A)
-    (org-schedule :SCHEDULED "<today>")
-  )
-  (define-key global-map (kbd "M-p") 'todo-set-urgent)
+(define-key evil-normal-state-map (kbd "M-[") 'org-priority-up)
+(define-key evil-normal-state-map (kbd "M-]") 'org-priority-down)
+(define-key global-map (kbd "C-RET") 'org-meta-return)
+;; Define subtree moving
+(define-key evil-normal-state-map (kbd "M-k") 'org-move-subtree-up)
+(define-key evil-normal-state-map (kbd "M-j") 'org-move-subtree-down)
+;; Add WAITING state to org-todos
+(setq org-todo-keywords
+'((sequence "TODO" "WAITING" "DONE")))
+;; Set keybinding for todo state toggle "t" in normal mode of evil
+(define-key evil-normal-state-map (kbd "t") 'org-todo)
+;; Set keybinding for inserting date --> ", ." in normal mode of evil
+(define-key evil-normal-state-map (kbd ", .") 'org-time-stamp)
+;; Set keybinding for inserting deadline --> ", ." in normal mode of evil
+(define-key evil-normal-state-map (kbd ", d") 'org-deadline)
+;; Export to pdf for beamer
+(define-key evil-normal-state-map (kbd ", e") 'org-beamer-export-to-pdf)
+;; Archive
+(define-key evil-normal-state-map (kbd ", a") 'org-archive-subtree)
+;; Schedule
+(define-key evil-normal-state-map (kbd ", s") 'org-schedule)
+;; Set bullets for lists
+(use-package org-bullets
+   :hook (org-mode . org-bullets-mode))
+;; Add Tags
+(setq org-tag-alist '(("@meeting" . ?m) ("@home" . ?h) ("laptop" . ?l)))
+;; Customize org priorities
+(setq org-default-priority ?D)
+(setq org-lowest-priority ?E)
+(setq org-highest-priority ?A)
+;; Colors for priorities
+(setq org-priority-faces '((?A :foreground "red")
+  (?B :foreground "yellow")
+  (?C :foreground "blue")
+  (?E :foreground "green")))
+;; Set color
+(setq org-agenda-with-colors t)
+;; Todo state colors
+(setq org-todo-keyword-faces
+'(("WAITING" . "gray")))
+;; Shortcut for urgent tasks
+(defun todo-set-urgent()
+  (interactive)
+  (org-priority ?A)
+  (org-schedule :SCHEDULED "<today>")
+)
+(define-key global-map (kbd "M-p") 'todo-set-urgent)
 
 ;; Setup Undo tree
 (use-package undo-tree
@@ -187,11 +195,11 @@
   :hook (org-mode . org-fancy-priorities-mode)
   :config
   (setq org-fancy-priorities-list 
-        (list (propertize "!" 'face '(:height 1.5 :weight bold))
-              (propertize "⬆" 'face '(:height 1.5))
-              (propertize "⬇" 'face '(:height 1.5))
-              (propertize "☕" 'face '(:height 1.5)))))
-	  
+  (list (propertize "!" 'face '(:height 1.5 :weight bold))
+	(propertize "⬆" 'face '(:height 1.5))
+	(propertize "⬇" 'face '(:height 1.5))
+	(propertize "☕" 'face '(:height 1.5)))))
+  
 ;; Inserting images
 (use-package xclip
   :ensure t
@@ -202,7 +210,7 @@
   :ensure t
   :after org
   :bind (:map org-mode-map
-         ("C-c s" . org-download-clipboard)))
+   ("C-c s" . org-download-clipboard)))
 
 ;; Inline images
 (setq org-image-actual-width nil)
@@ -212,21 +220,86 @@
 
 ;; Open files externally
 (setq org-file-apps
-      (append '((auto-mode . emacs)
-                ("\\.mm\\'" . default)
-                ("\\.x?html?\\'" . default)
-                ("\\.pdf\\'" . "evince %s")
-                ("\\.png\\'" . "eog %s")
-                ("\\.jpg\\'" . "eog %s")
-                ("\\.jpeg\\'" . "eog %s")
-                ("\\.gif\\'" . "eog %s"))
-              org-file-apps))
+(append '((auto-mode . emacs)
+	  ("\\.mm\\'" . default)
+	  ("\\.x?html?\\'" . default)
+	  ("\\.pdf\\'" . "evince %s")
+	  ("\\.png\\'" . "eog %s")
+	  ("\\.jpg\\'" . "eog %s")
+	  ("\\.jpeg\\'" . "eog %s")
+	  ("\\.gif\\'" . "eog %s"))
+	org-file-apps))
 
 ;; Capture template
 (setq org-capture-templates
-      '(("t" "Todo" entry (file "~/Dropbox/Documents/Orgzly/inbox.org")
-         "* TODO %?\n")))
+'(("t" "Todo" entry (file "~/Dropbox/Documents/Orgzly/inbox.org")
+   "* TODO %?\n")))
+;; Disable bable confirmation
+(setq org-confirm-babel-evaluate nil)
 #+end_src
 
+#+RESULTS:
 
-* TODO List
+* Org agenda
+
+#+begin_src emacs-lisp 
+(setq org-agenda-files '("~/Dropbox/Documents/Orgzly"))
+(setq org-agenda-custom-commands
+'(("c" "Custom Agenda View"
+   ((agenda "" ((org-agenda-span 1)
+	  (org-agenda-overriding-header "\nScheduled Tasks for Today (excluding WAITING)\n----------------------------")
+	  (org-agenda-skip-function
+	   '(or (org-agenda-skip-entry-if 'todo '("WAITING"))
+		(org-agenda-skip-entry-if 'nottodo 'todo)))))
+    (tags-todo "+PRIORITY=\"A\"-SCHEDULED>=\"<today>\"-TODO=\"WAITING\""
+	 ((org-agenda-overriding-header "\nHigh Priority Tasks (excluding WAITING)\n-------------------")
+	  (org-agenda-sorting-strategy '(priority-down))))
+    (agenda "" ((org-agenda-span 3)
+	  (org-agenda-start-on-weekday nil)
+	  (org-agenda-start-day "+1d")
+	  (org-agenda-overriding-header "\nNext Few Days Scheduled Tasks (excluding WAITING)\n------------------------------")
+	  (org-agenda-skip-function
+	   '(or (org-agenda-skip-entry-if 'todo '("WAITING"))
+		(org-agenda-skip-entry-if 'deadline 'todo '("DONE"))))))
+    (tags-todo "TODO=\"WAITING\""
+	 ((org-agenda-overriding-header "\nTasks in WAITING State\n-----------------------")))
+   ))))
+(global-set-key (kbd "C-c a") (lambda () (interactive) (org-agenda nil "c")))
+
+(use-package evil-org
+  :ensure t
+  :after org
+  :hook (org-mode . (lambda () evil-org-mode))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+#+end_src
+
+#+RESULTS:
+| my/org-agenda-mode-setup |
+
+* Auto Format Lisp code
+
+#+begin_src emacs-lisp 
+(defun format-lisp-code (code)
+  ;; Add your formatting logic here. This is a placeholder.
+  ;; For simplicity, it just returns the code as-is.
+  code)
+
+(let ((code (read-line)))
+  (format t "~A" (format-lisp-code code)))
+ 
+(defun my/format-lisp-babel-blocks ()
+  "Format all Common Lisp Babel blocks in the current buffer."
+  (interactive)
+  (org-babel-map-src-blocks nil
+    (when (string= lang "lisp") ;; Check if it's a Common Lisp block
+      (let ((formatted-code (shell-command-to-string (format "echo %S | sbcl --script ~/lisp-format.lisp" (org-element-property :value src-block)))))
+        (org-edit-src-code)
+        (erase-buffer)
+        (insert formatted-code)
+        (org-edit-src-exit)))))
+
+(add-hook 'org-mode-hook (lambda ()
+                           (add-hook 'before-save-hook #'my/format-lisp-babel-blocks nil 'local)))
+#+end_src
